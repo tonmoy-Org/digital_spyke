@@ -66,9 +66,18 @@ const config: Config = {
         'shimmer-slide': 'shimmer-slide var(--speed) ease-in-out infinite alternate',
         'spin-around': 'spin-around calc(var(--speed) * 2) infinite linear',
         gradient: 'gradient 8s linear infinite',
-        grid: 'grid 15s linear infinite'
+        grid: 'grid 15s linear infinite',
+        orbit: 'orbit calc(var(--duration)*1s) linear infinite'
       },
       keyframes: {
+        orbit: {
+          '0%': {
+            transform: 'rotate(calc(var(--angle) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg))'
+          },
+          '100%': {
+            transform: 'rotate(calc(var(--angle) * 1deg + 360deg)) translateY(calc(var(--radius) * 1px)) rotate(calc((var(--angle) * -1deg) - 360deg))'
+          }
+        },
         'border-beam': {
           '100%': {
             'offset-distance': '100%'

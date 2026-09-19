@@ -4,9 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState, useEffect } from "react";
-import logo from '@/public/logo/acecloud.png';
+import logo from '@/public/logo/logo3.png';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { TextField, Button, Typography, Stack } from '@mui/material';
+
+import { cn } from "@/lib/utils";
+import { InteractiveGridPattern } from "@/components/magicui/interactive-grid-pattern";
 
 const Navbar = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -70,12 +73,12 @@ const Navbar = () => {
 
     return (
         <>
-            <nav className="shadow-none p-3 fixed w-full z-50 px-4 md:px-10">
+            <nav className="shadow-none p-3 fixed top-0 left-0 right-0 z-50 px-4 md:px-10">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center">
-                        <div className="w-32 md:w-40 me-4 md:me-10">
+                        <div className="w-48 md:w-45 me-4 md:me-10">
                             <Link prefetch={true} href="/" passHref>
-                                {isScrolled ? (
+                                {isScrolled && !drawerOpen ? (
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         className="h-10 w-10 text-white"
@@ -91,7 +94,7 @@ const Navbar = () => {
                                         />
                                     </svg>
                                 ) : (
-                                    <Image src={logo} alt="Digital Spyke Logo" width={160} height={50} style={{ width: '100%', height: 'auto' }} />
+                                    <Image src={logo} alt="Digital Spyke Logo" width={276} height={200} style={{ width: '100%', height: 'auto', objectFit: 'contain' }} />
                                 )}
                             </Link>
                         </div>
@@ -144,58 +147,74 @@ const Navbar = () => {
             )}
 
             <div
-                className={`fixed inset-y-0 right-0 w-full md:w-1/2 bg-white transform transition-transform duration-500 ease-in-out z-40 ${drawerOpen ? "translate-x-0" : "translate-x-full"
-                    }`}
+                className={`fixed top-0 left-0 right-0 bottom-0 bg-[#091021] transform transition-transform duration-500 ease-in-out z-40 overflow-hidden ${
+                    drawerOpen ? "translate-y-0 shadow-2xl" : "-translate-y-full"
+                }`}
             >
-                <div className="w-full mt-16 px-4 md:px-10 overflow-y-auto h-[calc(100vh-64px)]">
-                    {[
-                        { text: "Home", href: "/" },
-                        { text: "About Us", href: "/about" },
-                        // { text: "Portfolio", href: "/projects" },
-                        { text: "Blogs", href: "/blog" },
-                        { text: "Contact", href: "/contact" },
-                    ].map(({ text, href }) => {
-                        const isActive = pathname === href;
+                {/* Interactive Grid Pattern Background */}
+                <InteractiveGridPattern
+                    className={cn(
+                        "[mask-image:radial-gradient(600px_circle_at_center,white,transparent)]",
+                        "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12 opacity-70"
+                    )}
+                />
 
-                        return (
-                            <Link
-                                key={text}
-                                href={href}
-                                passHref
-                                onClick={toggleDrawer}
-                            >
-                                <div
-                                    className={`py-4 cursor-pointer p-2 group flex items-center gap-2 justify-end ${isActive ? "text-[#1D4ED8] font-bold" : "text-black"
-                                        }`}
-                                >
-                                    <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                        <svg className="h-3 w-3" viewBox="0 0 12 12" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="6" cy="6" r="6" fill="currentColor"></circle>
-                                        </svg>
-                                    </span>
-                                    <span className="text-xl md:text-3xl">{text}</span>
-                                </div>
-                            </Link>
-                        );
-                    })}
+                <div className="relative z-10 w-full h-full pt-24 pb-12 px-6 md:px-12 lg:px-20 max-w-[1600px] mx-auto overflow-y-auto overflow-x-hidden">
+                    <div className="flex flex-col h-full">
+                        {/* Navigation Links (Vertical) */}
+                        <div className="flex flex-col space-y-2">
+                            {[
+                                { text: "Home", href: "/" },
+                                { text: "About Us", href: "/about" },
+                                // { text: "Portfolio", href: "/projects" },
+                                { text: "Blogs", href: "/blog" },
+                                { text: "Contact", href: "/contact" },
+                            ].map(({ text, href }) => {
+                                const isActive = pathname === href;
 
-                    {/* Contact Info and Newsletter Section */}
-                    <div className="m-4 md:m-2 border-t border-black py-6">
-                        <div className="flex flex-col md:flex-row justify-between lg:gap-8 gap-8">
-                            <div className="w-full md:w-1/2">
-                                <Typography variant="h6" sx={{ color: '#000', mb: 2, fontSize: { xs: '1rem', md: '1.25rem' } }}>
+                                return (
+                                    <Link
+                                        key={text}
+                                        href={href}
+                                        passHref
+                                        onClick={toggleDrawer}
+                                    >
+                                        <div
+                                            className={`py-2 cursor-pointer group flex items-center gap-3 justify-start transition-all duration-300 ${isActive ? "text-[#1D4ED8] font-bold" : "text-white hover:text-[#1D4ED8]"
+                                                }`}
+                                        >
+                                            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                <svg className="h-3 w-3 text-[#1D4ED8]" viewBox="0 0 12 12" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="6" cy="6" r="6" fill="currentColor"></circle>
+                                                </svg>
+                                            </span>
+                                            <span className="text-3xl md:text-5xl font-medium tracking-tight group-hover:translate-x-2 transition-transform duration-300">{text}</span>
+                                        </div>
+                                    </Link>
+                                );
+                            })}
+                        </div>
+
+                        <div className="mt-auto pt-8">
+                            {/* Divider Line */}
+                            <div className="border-t border-gray-800 my-4"></div>
+
+                            {/* Newsletter & Contact Us Side-by-Side Section */}
+                            <div className="flex flex-col md:flex-row justify-between items-start gap-8 pb-4">
+                            {/* Left Column: Stay Updated */}
+                            <div className="w-full md:w-1/2 lg:w-7/12">
+                                <Typography variant="h6" sx={{ color: '#fff', mb: 2, fontSize: { xs: '1.1rem', md: '1.3rem' }, fontWeight: 500 }}>
                                     Stay Updated with Our Latest News and Offers
                                 </Typography>
                                 <form onSubmit={handleSubscribe}>
                                     <TextField
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        label="Enter your email"
+                                        placeholder="Enter your email"
                                         variant="standard"
                                         size="small"
                                         sx={{
-                                            input: { color: '#000' },
-                                            label: { color: '#aaa' },
+                                            input: { color: '#fff' },
                                             mb: 2,
                                             width: '100%',
                                             '& .MuiInput-underline:before': {
@@ -216,7 +235,7 @@ const Navbar = () => {
                                         alignItems="center"
                                         sx={{
                                             '&:hover .animated-button': {
-                                                backgroundColor: '#5a3ae4',
+                                                backgroundColor: '#1D4ED8',
                                             },
                                             '&:hover .animated-arrow': {
                                                 transform: 'translateX(5px)',
@@ -266,14 +285,19 @@ const Navbar = () => {
                                 )}
                             </div>
 
-                            {/* Contact Info Section */}
-                            <div className="w-full md:w-1/4 mt-3 md:mt-0">
-                                <Typography variant="h6" sx={{ color: '#000', mb: 2, fontSize: { xs: '1rem', md: '1.25rem' } }}>
+                            {/* Right Column: Contact Us */}
+                            <div className="w-full md:w-1/2 lg:w-fit mt-6 md:mt-0 md:text-right">
+                                <Typography variant="h6" sx={{ color: '#fff', mb: 2, fontSize: { xs: '1.1rem', md: '1.3rem' }, fontWeight: 500 }}>
                                     Contact Us
                                 </Typography>
-                                <p className="font-bold">YVR - YYC - YYZ</p>
-                                <a href="mailto:contact@digitalspyke.ca" className="block mt-2 text-sm md:text-base">contact@digitalspyke.ca</a>
-                                <a href="tel:+16479311690" className="block mt-2 text-sm md:text-base">+1 (647) 931-1690</a>
+                                <p className="font-bold text-white text-sm md:text-base">YVR - YYC - YYZ</p>
+                                <a href="mailto:contact@digitalspyke.ca" className="block mt-2 text-sm md:text-base text-gray-300 hover:text-[#1D4ED8] transition-colors">
+                                    contact@digitalspyke.ca
+                                </a>
+                                <a href="tel:+16479311690" className="block mt-1 text-sm md:text-base text-gray-300 hover:text-[#1D4ED8] transition-colors">
+                                    +1 (647) 931-1690
+                                </a>
+                                </div>
                             </div>
                         </div>
                     </div>

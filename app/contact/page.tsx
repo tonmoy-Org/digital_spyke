@@ -130,7 +130,9 @@ const Contact = () => {
                 transition={{ duration: 0.7, ease: "easeOut" }}
                 viewport={{ once: true, amount: 0.4 }}
               >
-                <Box p={4} color="white">
+                <Box p={{ xs: 2, md: 4 }} color="white">
+
+                  {/* Heading */}
                   <Typography
                     sx={{
                       background: 'linear-gradient(to bottom, #D1D5DB, #1F2937)',
@@ -139,72 +141,167 @@ const Contact = () => {
                       color: 'transparent',
                       fontSize: { xs: '1.5rem', md: '2rem', lg: '2.5rem' },
                       textTransform: 'uppercase',
+                      fontWeight: 700,
+                      mb: 2,
                     }}
                   >
                     Get In Touch
-                  </Typography>
-                  <Divider sx={{ my: 1 }} />
-                  <Typography variant="body1" gutterBottom>
+                  </Typography>   
+
+                  {/* Inline Contact Details */}
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      alignItems: 'center',
+                      gap: { xs: 1, sm: 1.5 },
+                      color: '#9CA3AF',
+                      fontSize: { xs: '0.85rem', sm: '0.95rem' },
+                      mb: 3,
+                    }}
+                  >
                     <a
                       href="mailto:contact@digitalspyke.ca"
                       style={{
+                        color: '#ffffff',
                         textDecoration: 'none',
-                        color: 'inherit',
-                        display: 'flex',
-                        alignItems: 'center',
-                        transition: 'color 0.3s ease, transform 0.3s ease',
-                        flexWrap: 'wrap',  // Ensures the content wraps properly on 
+                        transition: 'color 0.2s ease',
                       }}
-
                     >
-                      <Email sx={{
-                        verticalAlign: 'middle',
-                        my: 1,
-                        mr: 1,
-                        transition: 'transform 0.3s ease',
-                        fontSize: { xs: '1.2rem', sm: '1.5rem' }  // Adjusts icon size based on screen size
-                      }} />
-                      <span style={{ fontSize: '1rem', paddingRight: '10px' }}>
-                        contact@digitalspyke.ca
-                      </span>
+                      contact@digitalspyke.ca
                     </a>
-
-                    {/* Phone Number Section */}
+                    <span style={{ color: '#4B5563', userSelect: 'none' }}>•</span>
                     <a
                       href="tel:+16477956041"
                       style={{
+                        color: '#ffffff',
                         textDecoration: 'none',
-                        color: 'inherit',
-                        display: 'flex',
-                        alignItems: 'center',
-                        transition: 'color 0.3s ease, transform 0.3s ease',
-                        flexWrap: 'wrap',
+                        transition: 'color 0.2s ease',
                       }}
-                      className="phone-link"
                     >
-                      <Phone sx={{
-                        verticalAlign: 'middle',
-                        mr: 1,
-                        transition: 'transform 0.3s ease',
-                        fontSize: { xs: '1.2rem', sm: '1.5rem' }  // Adjusts icon size based on screen size
-                      }} />
-                      <span style={{ fontSize: '1rem', paddingRight: '10px' }}>
-                        +1(647)-931-1690
-                      </span>
+                      +1(647)-931-1690
                     </a>
-                  </Typography>
+                    <span style={{ color: '#4B5563', userSelect: 'none' }}>•</span>
+                    <span style={{ color: '#ffffff' }}>
+                      Toronto, Canada
+                    </span>
+                  </Box>
 
-                  <Typography variant="body1">
-                    <LocationOn sx={{ verticalAlign: 'middle', mr: 1 }} />
-                    Toronto, Canada
-                  </Typography>
-                  <Box sx={{ mt: 3 }}>
-                    <Image
-                      src={map}
-                      alt="Map of the world"
-                      width={400}
-                      height={300}
-                    />
+                  {/* Map with Glowing Location Pin Beam */}
+                  <Box
+                    sx={{
+                      position: 'relative',
+                      width: '100%',
+                      mt: 1,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        position: 'relative',
+                        width: '100%',
+                        maxWidth: '850px',
+                        minHeight: { xs: '260px', sm: '350px', md: '420px' },
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Image
+                        src={map}
+                        alt="Map of the world"
+                        width={1000}
+                        height={550}
+                        style={{
+                          width: '100%',
+                          height: 'auto',
+                          minHeight: '260px',
+                          filter: 'brightness(0.35) contrast(1.2) opacity(0.35)',
+                          objectFit: 'contain',
+                        }}
+                      />
+
+                      {/* Location Pin & Light Beam Assembly */}
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          top: '40%',
+                          left: '26%',
+                          transform: 'translate(-50%, -100%)',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          zIndex: 2,
+                          pointerEvents: 'none',
+                        }}
+                      >
+                        {/* Floating Location Badge */}
+                        <Box
+                          sx={{
+                            backgroundColor: 'rgba(23, 25, 34, 0.9)',
+                            backdropFilter: 'blur(10px)',
+                            border: '1px solid rgba(255, 255, 255, 0.15)',
+                            borderRadius: '8px',
+                            px: 1.8,
+                            py: 0.6,
+                            color: '#FFFFFF',
+                            fontSize: '0.8rem',
+                            fontWeight: 600,
+                            whiteSpace: 'nowrap',
+                            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.6), 0 0 10px rgba(59, 130, 246, 0.2)',
+                            letterSpacing: '0.02em',
+                          }}
+                        >
+                          Toronto, Canada
+                        </Box>
+
+                        {/* Vertical Glowing Light Beam */}
+                        <Box
+                          sx={{
+                            width: '2px',
+                            height: { xs: '45px', sm: '65px' },
+                            background: 'linear-gradient(to top, #3B82F6 0%, rgba(59, 130, 246, 0.2) 100%)',
+                            boxShadow: '0 0 8px #3B82F6, 0 0 16px rgba(59, 130, 246, 0.8)',
+                          }}
+                        />
+
+                        {/* Ground Glow & Dot Target */}
+                        <Box
+                          sx={{
+                            position: 'relative',
+                            width: '50px',
+                            height: '18px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            mt: '-8px',
+                          }}
+                        >
+                          {/* Translucent Ellipse Aura */}
+                          <Box
+                            sx={{
+                              position: 'absolute',
+                              width: '44px',
+                              height: '16px',
+                              borderRadius: '50%',
+                              background: 'radial-gradient(ellipse at center, rgba(59, 130, 246, 0.6) 0%, rgba(59, 130, 246, 0) 75%)',
+                            }}
+                          />
+                          {/* Core Glowing Dot */}
+                          <Box
+                            sx={{
+                              width: '7px',
+                              height: '7px',
+                              borderRadius: '50%',
+                              backgroundColor: '#60A5FA',
+                              boxShadow: '0 0 10px #3B82F6, 0 0 20px #3B82F6',
+                            }}
+                          />
+                        </Box>
+                      </Box>
+                    </Box>
                   </Box>
                 </Box>
               </motion.div>
