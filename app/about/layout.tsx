@@ -1,0 +1,18 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'About Digital Spyke',
+    description: "Learn more about Digital Spyke and our mission.",
+};
+
+const Layout = ({
+    children,
+}: {
+    children: React.ReactNode
+}) => {
+    return (
+        <div>{children}</div>
+    );
+};
+
+export default Layout;
