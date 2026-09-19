@@ -1,6 +1,7 @@
 'use client';
+
 import AnimatedCustomLoader from '@/app/loading';
-import MoreBlog from '@/components/MoreBlog/MoreBlog';
+import MoreBlog from '@/components/blog/MoreBlog';
 import {
     Typography,
     Card,
@@ -77,7 +78,6 @@ const BlogDetails: React.FC = () => {
         <div>
             <div className='lg:max-w-6xl mx-auto'>
                 <Box sx={{ pt: { xs: 10, md: 10 }, pb: 5 }}>
-                    {/* Main Blog Content */}
                     <Box
                         sx={{
                             maxWidth: '7xl',
@@ -202,10 +202,8 @@ const BlogDetails: React.FC = () => {
                             </CardContent>
                         </Card>
                     </Box>
-
                 </Box>
             </div>
-            {/* More Blog Section */}
             <Box sx={{ px: { xs: 2, md: 4 } }}>
                 <MoreBlog />
             </Box>

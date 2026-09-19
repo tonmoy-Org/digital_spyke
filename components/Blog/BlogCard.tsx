@@ -1,12 +1,11 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
-import { Box, Button, Stack } from "@mui/material";
+import { Box } from "@mui/material";
 import { motion } from "framer-motion";
 import banner from '@/public/banner/new-banner.svg';
 
-export default function BlogFor() {
+export default function BlogCard() {
     return (
         <div
             className='pt-28 pb-10 relative'
@@ -17,7 +16,6 @@ export default function BlogFor() {
                 backgroundRepeat: 'no-repeat',
             }}
         >
-            {/* Gradient overlay for better text readability */}
             <div
                 className="absolute inset-0"
                 style={{
@@ -39,7 +37,6 @@ export default function BlogFor() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2, duration: 0.6 }}
                     >
-
                         <span
                             style={{
                                 background: 'linear-gradient(45deg, #7a58ff 40%, #9d86ff 60%)',
@@ -53,14 +50,6 @@ export default function BlogFor() {
                         </span>
                         <span className='ms-2'>From Digital Spyke</span>
                     </motion.p>
-                    {/* <motion.p
-                        className="text-[0.8rem] lg:text-[1.125rem] lg:!leading-snug lg:mt-3 text-[#BABABA] text-center lg:w-[550px] py-2 mx-auto"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4, duration: 0.6 }}
-                    >
-                        We work with clients in all sectors and of all sizes, from bootstrapped startups to Fortune 500 companies.
-                    </motion.p> */}
                 </Box>
             </motion.div>
         </div>

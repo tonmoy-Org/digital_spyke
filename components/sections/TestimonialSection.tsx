@@ -6,7 +6,7 @@ import Marquee from 'react-fast-marquee';
 import StarIcon from '@mui/icons-material/Star';
 import { motion } from 'framer-motion';
 
-export default function Testimonials() {
+export default function TestimonialSection() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -96,7 +96,6 @@ export default function Testimonials() {
     },
   ];
 
-  // Function to render star ratings
   interface RenderStarsProps {
     rating: number;
   }
@@ -113,7 +112,6 @@ export default function Testimonials() {
     ));
   };
 
-  // Glassmorphism card styles (same as FeaturesSection)
   const cardStyles = {
     width: isMobile ? 280 : 350,
     minWidth: isMobile ? 280 : 350,
@@ -132,12 +130,13 @@ export default function Testimonials() {
   };
 
   return (
-    <Box sx={{
-      position: 'relative',
-      overflow: 'hidden',
-      py: 8,
-      px: { xs: 0, md: 12 }
-    }}
+    <Box
+      sx={{
+        position: 'relative',
+        overflow: 'hidden',
+        py: 8,
+        px: { xs: 0, md: 12 }
+      }}
       style={{ fontFamily: "'DM Sans', sans-serif" }}
     >
       <Container maxWidth="xl" sx={{ position: 'relative' }}>
@@ -190,7 +189,6 @@ export default function Testimonials() {
           >
             {testimonials.map((testimonial, index) => (
               <Card key={index} sx={cardStyles}>
-                {/* Blue gradient line at the top of the card */}
                 <Box
                   sx={{
                     height: '1px',
@@ -222,11 +220,7 @@ export default function Testimonials() {
                       <Box sx={{ display: 'flex', mt: 0.5 }}>{renderStars(testimonial.rating)}</Box>
                     </Box>
                   </Box>
-                  <Box
-                    sx={{
-                      mt: 1.5,
-                    }}
-                  >
+                  <Box sx={{ mt: 1.5 }}>
                     <Typography
                       variant="caption"
                       sx={{
@@ -266,7 +260,6 @@ export default function Testimonials() {
           >
             {testimonials2.map((testimonial, index) => (
               <Card key={index} sx={cardStyles}>
-                {/* Blue gradient line at the top of the card */}
                 <Box
                   sx={{
                     height: '0.5px',

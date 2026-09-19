@@ -1,8 +1,9 @@
-"use client"; // Ensure it's client-side for scroll effects
+"use client";
+
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 
-export default function OurApproach() {
+export default function OurApproachSection() {
     const [scrollProgress, setScrollProgress] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -15,7 +16,6 @@ export default function OurApproach() {
                 const containerHeight = container.offsetHeight;
                 const windowHeight = window.innerHeight;
 
-                // Calculate scroll progress within the container
                 const progress = Math.max(
                     0,
                     Math.min((scrollTop - containerTop) / (containerHeight - windowHeight), 1)
@@ -41,7 +41,6 @@ export default function OurApproach() {
             </div>
 
             <div className="relative lg:max-w-7xl mx-auto pb-20 px-10">
-                {/* Vertical Progress Bar */}
                 <div className="absolute left-[60px] top-0 h-full overflow-hidden w-[2px] bg-[linear-gradient(to_bottom,var(--tw-gradient-stops))] from-transparent from-[0%] via-neutral-200 dark:via-neutral-700 to-transparent to-[99%] [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)]">
                     <div
                         className="absolute inset-x-0 top-0 w-[2px] bg-gradient-to-t from-purple-500 via-blue-500 to-transparent from-[0%] via-[10%] rounded-full"
@@ -49,7 +48,6 @@ export default function OurApproach() {
                     />
                 </div>
 
-                {/* Timeline Sections */}
                 <div className="flex flex-col lg:space-y-20 space-y-16">
                     {[
                         {
@@ -77,30 +75,24 @@ export default function OurApproach() {
                         },
                     ].map((section, index) => (
                         <div key={index} className="flex justify-start pt-10 md:pt-40 md:gap-10">
-                            {/* Sticky Circular Indicator */}
                             <div className="sticky flex flex-col md:flex-row z-40 items-center top-40 self-start max-w-xs lg:max-w-sm md:w-full">
                                 <div className="h-10 w-10 rounded-full bg-white dark:bg-black flex items-center justify-center border border-neutral-300 dark:border-neutral-700">
                                     <div className="h-4 w-4 rounded-full bg-neutral-200 dark:bg-neutral-800"></div>
                                 </div>
-                                {/* Year Label for Desktop */}
                                 <h3 className="hidden md:block text-xl md:pl-20 md:text-5xl font-bold text-neutral-500 dark:text-neutral-500">
                                     {section.year}
                                 </h3>
                             </div>
 
-                            {/* Content Section */}
                             <div className="relative pl-20 pr-4 md:pl-4 w-full">
-                                {/* Year Label for Mobile */}
                                 <h3 className="md:hidden block text-2xl mb-4 text-left font-bold text-neutral-500 dark:text-neutral-500">
                                     {section.year}
                                 </h3>
 
-                                {/* Description */}
                                 <p className="text-neutral-200 text-xs md:text-sm font-normal mb-8">
                                     {section.description}
                                 </p>
 
-                                {/* Bullet Points (if any) */}
                                 {section.bulletPoints && (
                                     <div className="mb-8">
                                         {section.bulletPoints.map((point, i) => (
@@ -111,7 +103,6 @@ export default function OurApproach() {
                                     </div>
                                 )}
 
-                                {/* Image Grid (if any) */}
                                 {section.images && (
                                     <div className="grid grid-cols-2 gap-4">
                                         {section.images.map((img, i) => (

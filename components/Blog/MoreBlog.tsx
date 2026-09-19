@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Card, CardContent, CardMedia, Typography, CardActions, Box, Grid } from '@mui/material';
 import { motion } from 'framer-motion';
@@ -6,10 +8,8 @@ import useSWR from 'swr';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
-// SWR fetcher function
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-// Animation configurations
 const staggerContainer = {
     hidden: { opacity: 0, y: 100 },
     show: {
@@ -27,11 +27,10 @@ const staggerItem = {
     show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
 };
 
-// Reading time calculation
 const calculateReadingTime = (text: string) => {
     const words = text.split(' ').length;
-    const readingSpeed = 200; // Average reading speed (words per minute)
-    return Math.ceil(words / readingSpeed); // Returns time in minutes
+    const readingSpeed = 200;
+    return Math.ceil(words / readingSpeed);
 };
 
 interface BlogCard {
@@ -97,17 +96,15 @@ const BlogCardComponent: React.FC<{ card: BlogCard; handleCardClick: (id: string
 const MoreBlog: React.FC = () => {
     const router = useRouter();
 
-    // Use SWR for fetching blog data
     const { data: cardData, error } = useSWR<BlogCard[]>('https://naturals-server.vercel.app/api/blogs', fetcher);
 
     const handleCardClick = (title_id: string) => {
-        router.push(`/blogs/${title_id}`);
+        router.push(`/blog/${title_id}`);
     };
 
     if (error) return <div>Error loading blogs.</div>;
     if (!cardData) return <div>Loading...</div>;
 
-    // Select only 3 random blogs for the suggested section
     const suggestedBlogs = [...cardData].sort(() => 0.5 - Math.random()).slice(0, 3);
 
     return (

@@ -1,18 +1,17 @@
 'use client';
 
-import { Card, CardContent, Typography, Box, Button, Grid } from '@mui/material';
+import { Card, CardContent, Typography, Box, Grid } from '@mui/material';
 import React from 'react';
 import dynamic from 'next/dynamic';
 
-import p1 from '@/public/projects/p1/f1.png'
-import p2 from '@/public/projects/p2/p2.png'
-import p3 from '@/public/projects/p3/p3.png'
-import p4 from '@/public/projects/p4/p4.png'
+import p1 from '@/public/projects/p1/f1.png';
+import p2 from '@/public/projects/p2/p2.png';
+import p3 from '@/public/projects/p3/p3.png';
+import p4 from '@/public/projects/p4/p4.png';
 
 import Image from 'next/image';
 import Link from 'next/link';
 
-// Dynamically import motion with SSR disabled
 const MotionCard = dynamic(() => import('framer-motion').then((mod) => mod.motion.div), {
     ssr: false,
 });
@@ -45,13 +44,13 @@ const cardData = [
     },
 ];
 
-const ProjectsSectionCard: React.FC = () => {
+const ProjectCard: React.FC = () => {
     return (
         <Box sx={{ py: 8, backgroundColor: '#0F0A2F' }}>
             <Grid container spacing={5} justifyContent="center" sx={{ px: { xs: 2, sm: 4 } }}>
                 {cardData.map((card, index) => (
                     <Grid item xs={12} sm={6} md={5} key={index}>
-                        <Link href={`/project/${card.id}`} passHref legacyBehavior>
+                        <Link href={`/projects/${card.id}`} passHref legacyBehavior>
                             <MotionCard style={{ textDecoration: 'none', display: 'block' }}>
                                 <Card
                                     sx={{
@@ -91,4 +90,4 @@ const ProjectsSectionCard: React.FC = () => {
     );
 };
 
-export default ProjectsSectionCard;
+export default ProjectCard;

@@ -1,10 +1,9 @@
 import React from 'react';
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 
-// Define a TypeScript interface for props
 interface CustomHeroProps {
     title: string;
     subtitle: string;
@@ -14,7 +13,6 @@ interface CustomHeroProps {
     imageAlt: string;
 }
 
-// Reusable Hero Component
 const CustomHero: React.FC<CustomHeroProps> = ({
     title,
     subtitle,
@@ -30,7 +28,6 @@ const CustomHero: React.FC<CustomHeroProps> = ({
             transition={{ duration: 0.7, ease: 'easeOut' }}
             viewport={{ once: true, amount: 0.4 }}
         >
-            {/* Button Section */}
             <Box textAlign="center" sx={{ my: 2 }}>
                 <div className="relative inline-flex h-8 overflow-hidden rounded-full p-[1.5px] focus:outline-none select-none">
                     <span className="absolute inset-[-1000%] animate-spin-slow bg-[conic-gradient(from_90deg_at_50%_50%,#6d28d9_0%,#d8b4fe_50%,#6d28d9_100%)]"></span>
@@ -39,7 +36,6 @@ const CustomHero: React.FC<CustomHeroProps> = ({
                     </span>
                 </div>
             </Box>
-            {/* Title and Subtitle */}
             <Box sx={{ mx: 'auto', mb: { xs: 4, md: 6 }, maxWidth: { lg: 700 } }}>
                 <Typography
                     variant="h2"
@@ -64,7 +60,6 @@ const CustomHero: React.FC<CustomHeroProps> = ({
                     {subtitle}
                 </Typography>
             </Box>
-            {/* Hero Image */}
             <Box sx={{ my: 4 }}>
                 <Image
                     src={imageSrc}

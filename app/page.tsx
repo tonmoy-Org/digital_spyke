@@ -3,7 +3,7 @@ import HeroSection from "@/components/sections/HeroSection";
 import HighlightSection from "@/components/sections/HighlightSection";
 import ProcessSection from "@/components/sections/ProcessSection";
 import ProjectsSection from "@/components/sections/ProjectsSection";
-import Testimonials from "@/components/sections/Testimonial ";
+import Testimonials from "@/components/sections/TestimonialSection";
 import { Box } from "@mui/material";
 
 export default function Home() {

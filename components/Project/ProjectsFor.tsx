@@ -1,8 +1,7 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
-import { Box, Button, Stack } from "@mui/material";
+import { Box } from "@mui/material";
 import { motion } from "framer-motion";
 import banner from '@/public/banner/new-banner.svg';
 
@@ -17,7 +16,6 @@ export default function ProjectsFor() {
                 backgroundRepeat: 'no-repeat',
             }}
         >
-            {/* Gradient overlay for better text readability */}
             <div
                 className="absolute inset-0"
                 style={{
@@ -60,7 +58,6 @@ export default function ProjectsFor() {
                     >
                         We work with clients in all sectors and of all sizes, from bootstrapped startups to Fortune 500 companies.
                     </motion.p>
-
                 </Box>
             </motion.div>
         </div>

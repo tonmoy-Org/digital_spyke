@@ -6,7 +6,7 @@ import { motion, useTransform, useSpring } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import banner from '@/public/banner/new-banner.svg';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import OurApproach from '@/components/About/OurApproach';
+import OurApproach from '@/components/sections/OurApproachSection';
 
 // Animation variants for Framer Motion
 const containerVariants = {

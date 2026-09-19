@@ -9,7 +9,7 @@ import {
     CardActions,
     Grid,
     Box,
-    CircularProgress // Import CircularProgress for the loader
+    CircularProgress
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import useSWR from 'swr';
@@ -17,7 +17,6 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Image from 'next/image';
 
-// SWR fetcher function
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const calculateReadingTime = (text: string) => {
@@ -39,14 +38,13 @@ interface BlogCard {
 const BlogSection: React.FC = () => {
     const router = useRouter();
 
-    // Use SWR for fetching blog data
     const { data: cardData, error, isValidating } = useSWR<BlogCard[]>(
         'https://naturals-server.vercel.app/api/blogs',
         fetcher
     );
 
     const handleCardClick = (title_id: string) => {
-        router.push(`/blogs/${title_id}`);
+        router.push(`/blog/${title_id}`);
     };
 
     if (error) return <div>Error loading blogs.</div>;
