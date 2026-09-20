@@ -35,7 +35,7 @@ export default function HighlightSection() {
     return (
         <section
             ref={sectionRef}
-            className="highlight-section relative py-10 lg:py-32 px-4 md:px-8"
+            className="highlight-section relative pt-12 lg:pt-28 pb-6 lg:pb-8 px-4 md:px-8"
             onMouseMove={handleMouseMove}
             style={{
                 background: `radial-gradient(circle at ${glowPosition.x} ${glowPosition.y}, rgba(0, 55, 255, 0.2), transparent 60%), linear-gradient(180deg, hsl(220, 65%, 3.52%) 0%, hsl(220, 65%, 3.52%) 35.54%, hsl(220, 65%, 3.52%) 100%)`,

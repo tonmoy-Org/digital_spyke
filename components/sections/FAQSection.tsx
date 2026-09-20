@@ -53,7 +53,7 @@ export default function FAQSection() {
     });
 
     return (
-        <Box sx={{ py: { xs: 8, lg: 2 }, bgcolor: "hsl(220, 65%, 3.52%)", color: "hsl(220, 10%, 54.4%)" }}>
+        <Box sx={{ pt: { xs: 8, lg: 2 }, pb: { xs: 10, md: 16 } }}>
             <Container maxWidth="md">
                 <motion.div
                     initial={{ opacity: 0, y: 100 }}
@@ -78,7 +78,7 @@ export default function FAQSection() {
                 {/* FAQ Items */}
                 <div className="lg:mt-20 mt-10">
                     {faqs.map((faq, index) => (
-                        <Accordion key={index} sx={{ bgcolor: "hsl(220, 65%, 3.52%)", color: "hsl(220, 10%, 54.4%)" }}>
+                        <Accordion key={index} sx={{ bgcolor: "#091021" }}>
                             <StyledAccordionSummary
                                 expandIcon={<ExpandMoreIcon />}
                                 aria-controls={`panel${index}-content`}

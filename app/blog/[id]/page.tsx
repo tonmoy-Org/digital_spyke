@@ -1,7 +1,7 @@
 'use client';
 
 import AnimatedCustomLoader from '@/app/loading';
-import MoreBlog from '@/components/blog/MoreBlog';
+import MoreBlog from '@/components/Blog/MoreBlog';
 import {
     Typography,
     Card,

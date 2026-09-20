@@ -4,7 +4,7 @@ import React from 'react';
 import { Box, Button, Stack } from "@mui/material";
 import { motion } from "framer-motion";
 import banner from '@/public/banner/new-banner.svg';
-import BlogSection from '@/components/blog/BlogSection';
+import BlogSection from '@/components/Blog/BlogSection';
 
 
 export default function Blog() {

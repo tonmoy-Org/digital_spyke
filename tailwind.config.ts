@@ -67,9 +67,19 @@ const config: Config = {
         'spin-around': 'spin-around calc(var(--speed) * 2) infinite linear',
         gradient: 'gradient 8s linear infinite',
         grid: 'grid 15s linear infinite',
-        orbit: 'orbit calc(var(--duration)*1s) linear infinite'
+        orbit: 'orbit calc(var(--duration)*1s) linear infinite',
+        marquee: 'marquee var(--duration, 30s) linear infinite',
+        'marquee-vertical': 'marquee-vertical var(--duration, 30s) linear infinite'
       },
       keyframes: {
+        marquee: {
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(calc(-100% - var(--gap, 1rem)))' }
+        },
+        'marquee-vertical': {
+          from: { transform: 'translateY(0)' },
+          to: { transform: 'translateY(calc(-100% - var(--gap, 1rem)))' }
+        },
         orbit: {
           '0%': {
             transform: 'rotate(calc(var(--angle) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg))'

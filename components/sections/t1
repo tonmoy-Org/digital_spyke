@@ -78,7 +78,7 @@ export default function ProcessSection() {
     // Bottom margin for every card (including the last one) so all cards
     // have the same sticky "runway". The button wrapper below cancels this
     // out with a negative top margin. Keep these two values in sync.
-    const cardGap = { xs: '35vh', md: '50vh' };
+    const cardGap = { xs: '30vh', md: '45vh' };
 
     return (
         <Box
@@ -215,8 +215,9 @@ export default function ProcessSection() {
                             className={`process-card-wrapper stage-${step.step}`}
                             sx={{
                                 position: 'sticky',
-                                top: { xs: '200px', sm: '220px', md: '240px' },
+                                top: { xs: '230px', sm: '250px', md: '270px' },
                                 zIndex: index + 1,
+                                backgroundColor: '#090912',
                                 paddingTop: '4px',
                                 paddingBottom: '4px',
                                 // FIX: same bottom margin for ALL cards (including the last),
@@ -231,21 +232,24 @@ export default function ProcessSection() {
                                     position: 'relative',
                                     borderRadius: { xs: '22px', sm: '26px', md: '30px' },
                                     overflow: 'hidden',
-                                    padding: { xs: '32px 24px', sm: '40px 32px', md: '48px 46px' },
-                                    height: { xs: 'auto', sm: 'calc(100vh - 280px)', md: 'calc(100vh - 260px)' },
-                                    minHeight: { xs: '520px', sm: '580px', md: '640px', lg: '680px' },
-                                    maxHeight: { xs: 'none', md: '780px', lg: '840px' },
+                                    padding: { xs: '26px 22px', sm: '32px 30px', md: '36px 40px' },
+                                    height: { xs: 'calc(100vh - 380px)', md: 'calc(100vh - 420px)' },
+                                    minHeight: { xs: '420px', md: '480px' },
+                                    maxHeight: { xs: '540px', md: '600px' },
                                     display: 'flex',
                                     flexDirection: 'column',
                                     justifyContent: 'space-between',
                                     backgroundColor: '#0b0e1b',
                                     backgroundImage: 'linear-gradient(180deg, #0b0e1b 0%, #060811 100%)',
                                     border: '1px solid rgba(0, 85, 255, 0.3)',
-                                    boxShadow: 'none',
-                                    transition: 'border-color 0.3s ease',
+                                    boxShadow:
+                                        index === 0
+                                            ? '0 20px 45px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 85, 255, 0.1)'
+                                            : '0 -15px 40px rgba(0, 0, 0, 0.95), 0 25px 50px rgba(0, 0, 0, 0.85), 0 0 35px rgba(0, 85, 255, 0.12)',
+                                    transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
                                     '&:hover': {
                                         borderColor: 'rgba(0, 153, 255, 0.55)',
-                                        boxShadow: 'none',
+                                        boxShadow: '0 -10px 45px rgba(0, 0, 0, 0.95), 0 0 40px rgba(0, 153, 255, 0.22)',
                                     },
                                 }}
                             >
@@ -365,7 +369,7 @@ export default function ProcessSection() {
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         flex: 1,
-                                        py: { xs: 3, md: 5 },
+                                        py: { xs: 2, md: 3 },
                                     }}
                                 >
                                     <Typography
@@ -498,7 +502,7 @@ export default function ProcessSection() {
                     // FIX: cancel the extra bottom margin of the last card so there is
                     // no big empty gap. Must match `cardGap` above.
                     // Increase the "+ 32px / + 48px" part if the button overlaps card 6.
-                    mt: { xs: 'calc(-35vh + 32px)', md: 'calc(-50vh + 48px)' },
+                    mt: { xs: 'calc(-30vh + 32px)', md: 'calc(-45vh + 48px)' },
                     zIndex: 10,
                     position: 'relative',
                 }}

@@ -228,7 +228,7 @@ export default function SmokeBackground({
 
     // Handle resizing smoothly
     let animationFrameId: number;
-    let startTime = performance.now();
+    const startTime = performance.now();
     let isVisible = true;
 
     const resize = () => {
