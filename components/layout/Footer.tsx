@@ -3,6 +3,7 @@
 import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import React, { useCallback, useState } from 'react';
 import logo from '@/public/logo/acecloud.png'
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -14,6 +15,13 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 
 function Footer() {
+    const pathname = usePathname();
+
+    // Do not render frontend Footer on Dashboard or Login pages
+    if (pathname?.startsWith('/dashboard') || pathname?.startsWith('/login')) {
+        return null;
+    }
+
     const [glowPosition, setGlowPosition] = useState({ x: "50%", y: "50%" });
     const [opacity, setOpacity] = useState(0);
     const [email, setEmail] = useState('');

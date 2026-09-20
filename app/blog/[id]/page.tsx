@@ -1,7 +1,7 @@
 'use client';
 
 import AnimatedCustomLoader from '@/app/loading';
-import MoreBlog from '@/components/Blog/MoreBlog';
+import MoreBlog from '@/components/blog/MoreBlog';
 import {
     Typography,
     Card,
@@ -24,7 +24,8 @@ interface BlogPost {
 }
 
 const BlogDetails: React.FC = () => {
-    const { id } = useParams();
+    const params = useParams();
+    const id = params?.id;
     const [blogPost, setBlogPost] = useState<BlogPost | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);

@@ -17,6 +17,7 @@ const NAV_LINKS = [
     // { text: "Portfolio", href: "/projects" },
     { text: "Blogs", href: "/blog" },
     { text: "Contact", href: "/contact" },
+    { text: "Dashboard", href: "/dashboard" },
 ];
 
 const Navbar = () => {
@@ -26,6 +27,11 @@ const Navbar = () => {
     const [message, setMessage] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const pathname = usePathname();
+
+    // Do not render frontend Navbar on Dashboard or Login pages
+    if (pathname?.startsWith('/dashboard') || pathname?.startsWith('/login')) {
+        return null;
+    }
 
     const toggleDrawer = () => setDrawerOpen((prev) => !prev);
     const handleCloseDrawer = () => setDrawerOpen(false);
