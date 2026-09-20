@@ -8,7 +8,7 @@ import { OrbitingCirclesDemo } from '@/components/sections/OrbitingCirclesDemo';
 
 export default function HeroSection() {
   return (
-    <div className="relative w-full min-h-[60vh] h-screen flex flex-col items-center justify-start pt-20 sm:pt-28 lg:pt-32 overflow-hidden bg-black">
+    <div className="relative w-full min-h-[580px] sm:min-h-[640px] md:h-screen flex flex-col items-center justify-start pt-16 sm:pt-24 lg:pt-32 overflow-hidden bg-black">
       {/* Dynamic Animated Smoke Background */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <SmokeBackground intensity={1.15} />
@@ -62,7 +62,7 @@ export default function HeroSection() {
       </section>
 
       {/* Orbiting Circles at bottom of Hero Section (1/2 visible) */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-[50%] z-10 pointer-events-none flex items-center justify-center ">
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-[50%] z-10 pointer-events-none flex items-center justify-center scale-[0.52] sm:scale-[0.72] md:scale-90 lg:scale-100 origin-center">
         <OrbitingCirclesDemo />
       </div>
 
