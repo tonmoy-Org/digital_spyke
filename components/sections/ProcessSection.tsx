@@ -12,6 +12,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { InteractiveGridPattern } from '@/components/magicui/interactive-grid-pattern';
+import { motion } from 'framer-motion';
 
 export default function ProcessSection() {
     const steps = [
@@ -141,60 +142,37 @@ export default function ProcessSection() {
                     pointerEvents: 'none',
                 }}
             >
-                <Box
-                    className="top-section"
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        textAlign: 'center',
-                        gap: { xs: 1.2, md: 1.6 },
-                        width: '100%',
-                        maxWidth: '800px',
-                    }}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                    viewport={{ once: true }}
+                    className="top-section flex flex-col items-center text-center gap-3 w-full max-w-3xl"
                 >
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        <Typography
-                            sx={{
-                                margin: 0,
-                                fontSize: { xs: '22px', sm: '28px', md: '34px', lg: '38px' },
-                                fontWeight: 700,
-                                lineHeight: 1.15,
-                                color: '#ffffff',
-                                letterSpacing: '-0.02em',
-                            }}
-                        >
+                    {/* Aceternity Badge */}
+                    <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md shadow-xl mb-2 overflow-hidden relative">
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-cyan-400/20 to-indigo-500/20" />
+                        <span className="relative text-xs sm:text-sm font-bold tracking-[0.25em] text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-400 uppercase">
                             Our proven process
-                        </Typography>
-                        <Typography
-                            sx={{
-                                margin: 0,
-                                fontSize: { xs: '22px', sm: '28px', md: '34px', lg: '38px' },
-                                fontWeight: 700,
-                                lineHeight: 1.15,
-                                background: 'linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.25) 100%)',
-                                WebkitBackgroundClip: 'text',
-                                WebkitTextFillColor: 'transparent',
-                                letterSpacing: '-0.02em',
-                            }}
-                        >
-                            We Simplify The Journey
-                        </Typography>
-                    </Box>
+                        </span>
+                    </div>
 
-                    <Typography
-                        sx={{
-                            color: 'rgba(255, 255, 255, 0.65)',
-                            fontSize: { xs: '12.5px', md: '14px' },
-                            lineHeight: 1.5,
-                            maxWidth: '620px',
-                            display: 'block',
-                            mt: 0.3,
-                        }}
-                    >
+                    {/* Gradient Main Heading */}
+                    <h2 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight text-white m-0 mb-4">
+                        We Simplify The{' '}
+                        <span className="relative inline-block">
+                            <span className="absolute -inset-2 bg-gradient-to-r from-cyan-400 to-blue-600 blur-xl opacity-30"></span>
+                            <span className="relative bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-400 bg-clip-text text-transparent drop-shadow-lg">
+                                Journey
+                            </span>
+                        </span>
+                    </h2>
+
+                    {/* Subtitle description */}
+                    <p className="text-sm sm:text-base md:text-lg text-gray-400 leading-relaxed max-w-2xl mx-auto m-0 font-medium">
                         From initial ideation to live global deployment, we execute every phase with precision, transparent communication, and Agile velocity.
-                    </Typography>
-                </Box>
+                    </p>
+                </motion.div>
             </Box>
 
             {/* Cards Section */}
@@ -215,7 +193,7 @@ export default function ProcessSection() {
                             className={`process-card-wrapper stage-${step.step}`}
                             sx={{
                                 position: 'sticky',
-                                top: { xs: '200px', sm: '220px', md: '240px' },
+                                top: { xs: '80px', sm: '120px', md: '240px' },
                                 zIndex: index + 1,
                                 paddingTop: '4px',
                                 paddingBottom: '4px',
@@ -229,11 +207,11 @@ export default function ProcessSection() {
                                 className={`process-card ${isLast ? 'secondary' : ''}`}
                                 sx={{
                                     position: 'relative',
-                                    borderRadius: { xs: '22px', sm: '26px', md: '30px' },
+                                    borderRadius: { xs: '18px', sm: '24px', md: '30px' },
                                     overflow: 'hidden',
-                                    padding: { xs: '32px 24px', sm: '40px 32px', md: '48px 46px' },
+                                    padding: { xs: '20px 16px', sm: '32px 24px', md: '48px 46px' },
                                     height: { xs: 'auto', sm: 'calc(100vh - 280px)', md: 'calc(100vh - 260px)' },
-                                    minHeight: { xs: '520px', sm: '580px', md: '640px', lg: '680px' },
+                                    minHeight: { xs: '420px', sm: '500px', md: '640px', lg: '680px' },
                                     maxHeight: { xs: 'none', md: '780px', lg: '840px' },
                                     display: 'flex',
                                     flexDirection: 'column',
@@ -287,9 +265,9 @@ export default function ProcessSection() {
                                 <Typography
                                     sx={{
                                         position: 'absolute',
-                                        right: { xs: 20, md: 40 },
-                                        top: { xs: 12, md: 20 },
-                                        fontSize: { xs: '95px', sm: '125px', md: '160px' },
+                                        right: { xs: 14, sm: 20, md: 40 },
+                                        top: { xs: 8, sm: 12, md: 20 },
+                                        fontSize: { xs: '72px', sm: '110px', md: '160px' },
                                         fontWeight: 900,
                                         lineHeight: 1,
                                         letterSpacing: '-0.05em',
@@ -341,19 +319,12 @@ export default function ProcessSection() {
                                         <IconComponent sx={{ fontSize: { xs: 25, sm: 29, md: 31 }, color: '#ffffff' }} />
                                     </Box>
 
-                                    {/* Step Label only — no title here */}
-                                    <Typography
-                                        sx={{
-                                            fontSize: { xs: '10px', md: '11px' },
-                                            fontWeight: 600,
-                                            letterSpacing: '0.15em',
-                                            textTransform: 'uppercase',
-                                            color: 'rgba(0, 153, 255, 0.85)',
-                                            lineHeight: 1.2,
-                                        }}
-                                    >
-                                        Step {step.step}
-                                    </Typography>
+                                    {/* Step Label with gradient badge */}
+                                    <div className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 backdrop-blur-sm">
+                                        <span className="text-[10px] md:text-[11px] font-mono font-bold tracking-[0.2em] uppercase text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
+                                            Step {step.step}
+                                        </span>
+                                    </div>
                                 </Box>
 
                                 {/* Center Title — positioned in the middle of the card */}
@@ -365,23 +336,17 @@ export default function ProcessSection() {
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         flex: 1,
-                                        py: { xs: 3, md: 5 },
+                                        py: { xs: 2, sm: 3, md: 5 },
                                     }}
                                 >
-                                    <Typography
-                                        variant="h3"
-                                        sx={{
-                                            margin: 0,
-                                            fontSize: { xs: '28px', sm: '36px', md: '44px' },
-                                            fontWeight: 700,
-                                            color: '#ffffff',
-                                            letterSpacing: '-0.03em',
-                                            textAlign: 'center',
-                                            lineHeight: 1.1,
-                                        }}
+                                    <motion.h3
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        whileInView={{ opacity: 1, scale: 1 }}
+                                        transition={{ duration: 0.4 }}
+                                        className="text-2xl sm:text-4xl md:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-100 to-slate-400 drop-shadow-[0_0_25px_rgba(0,153,255,0.3)] group-hover:from-white group-hover:via-cyan-100 group-hover:to-cyan-300 transition-all duration-300 text-center m-0"
                                     >
                                         {step.title}
-                                    </Typography>
+                                    </motion.h3>
                                 </Box>
 
                                 {/* Card Bottom: separator + description + tags */}
@@ -403,63 +368,21 @@ export default function ProcessSection() {
                                         }}
                                     />
 
-                                    <Typography
-                                        className="card-body-text"
-                                        sx={{
-                                            color: 'rgba(255, 255, 255, 0.75)',
-                                            fontSize: { xs: '13.5px', sm: '14.5px', md: '15.5px' },
-                                            lineHeight: 1.7,
-                                            margin: 0,
-                                            mb: { xs: 2.5, md: 3 },
-                                            textAlign: 'center',
-                                            mx: 'auto',
-                                            maxWidth: '720px',
-                                        }}
-                                    >
+                                    <p className="text-xs sm:text-sm md:text-base text-gray-300/90 leading-relaxed font-normal text-center mx-auto max-w-[720px] mb-4 sm:mb-5 m-0">
                                         {step.description}
-                                    </Typography>
+                                    </p>
 
                                     {/* Centered Tags */}
-                                    <Box
-                                        className="tags"
-                                        sx={{
-                                            display: 'flex',
-                                            gap: 1.2,
-                                            flexWrap: 'wrap',
-                                            justifyContent: 'center',
-                                        }}
-                                    >
+                                    <div className="flex flex-wrap gap-2 justify-center">
                                         {step.tags.map((tag, tagIndex) => (
-                                            <Box
+                                            <span
                                                 key={tagIndex}
-                                                className="tag-pill"
-                                                sx={{
-                                                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                                                    backdropFilter: 'blur(5px)',
-                                                    background: 'rgba(255, 255, 255, 0.04)',
-                                                    borderRadius: '10px',
-                                                    px: { xs: 1.6, md: 2 },
-                                                    py: { xs: 0.55, md: 0.7 },
-                                                    transition: 'all 0.25s ease',
-                                                    '&:hover': {
-                                                        borderColor: 'rgba(0, 85, 255, 0.55)',
-                                                        background: 'rgba(0, 85, 255, 0.15)',
-                                                    },
-                                                }}
+                                                className="text-xs sm:text-sm font-medium px-3.5 py-1.5 rounded-full border border-white/10 bg-white/[0.03] text-gray-300 backdrop-blur-sm transition-all duration-300 hover:border-cyan-500/50 hover:bg-cyan-500/10 hover:text-cyan-300 hover:scale-105 shadow-[0_2px_10px_rgba(0,0,0,0.2)]"
                                             >
-                                                <Typography
-                                                    sx={{
-                                                        color: 'rgba(255, 255, 255, 0.88)',
-                                                        margin: 0,
-                                                        fontSize: { xs: '12px', md: '13px' },
-                                                        fontWeight: 500,
-                                                    }}
-                                                >
-                                                    {tag}
-                                                </Typography>
-                                            </Box>
+                                                {tag}
+                                            </span>
                                         ))}
-                                    </Box>
+                                    </div>
                                 </Box>
 
                                 {isLast && (

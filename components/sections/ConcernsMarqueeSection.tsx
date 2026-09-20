@@ -416,8 +416,7 @@ function IconCard({ item }: { item: ConcernIconItem }) {
 export default function ConcernsMarqueeSection() {
   return (
     <section className="relative w-full py-12 sm:py-16 md:py-20 overflow-hidden ">
-      {/* Ambient background glow */}
-      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-cyan-500/[0.06] blur-[120px] rounded-full" />
+
 
       {/* Title */}
       <div className="relative z-10 text-center mb-8 sm:mb-12 px-4">

@@ -4,6 +4,7 @@ import HeroSection from "@/components/sections/HeroSection";
 import PortfolioHeroParallaxSection from "@/components/sections/PortfolioHeroParallaxSection";
 import ProcessSection from "@/components/sections/ProcessSection";
 import ProjectsSection from "@/components/sections/ProjectsSection";
+import SkillersZoneMethodSection from "@/components/sections/SkillersZoneMethodSection";
 import Testimonials from "@/components/sections/TestimonialSection";
 import { Box } from "@mui/material";
 
@@ -17,6 +18,7 @@ export default function Home() {
           <ProcessSection />
         </div>
         <ProjectsSection />
+        <SkillersZoneMethodSection />
         <Testimonials />
         <PortfolioHeroParallaxSection />
         <FAQSection />
