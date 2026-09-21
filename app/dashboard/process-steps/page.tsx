@@ -121,7 +121,6 @@ import {
   Trash2,
   ChevronUp,
   ChevronDown,
-  RotateCcw,
   Sparkles,
   Layers,
   Copy,
@@ -496,23 +495,6 @@ export default function ProcessStepsDashboardPage() {
     });
   };
 
-  // Reset to Defaults
-  const handleResetDefaults = async () => {
-    const result = await Swal.fire({
-      title: 'Reset to Defaults?',
-      text: 'This will revert all titles, descriptions, and process cards to the original 6 default steps.',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#3b82f6',
-      confirmButtonText: 'Yes, reset',
-    });
-
-    if (result.isConfirmed) {
-      setFormData(JSON.parse(JSON.stringify(DEFAULT_PROCESS_DATA)));
-      setPreviewCardIndex(0);
-    }
-  };
-
   // Save Settings
   const handleSaveSettings = async () => {
     setIsSaving(true);
@@ -567,7 +549,7 @@ export default function ProcessStepsDashboardPage() {
     return (
       <div className="p-12 flex flex-col items-center justify-center min-h-[450px]">
         <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-3" />
-        <p className="text-gray-500 text-xs font-semibold">Loading Process Steps Settings...</p>
+        <p className="text-gray-500 text-xs font-semibold">Loading Process Steps...</p>
       </div>
     );
   }
@@ -581,33 +563,12 @@ export default function ProcessStepsDashboardPage() {
   return (
     <main className="p-6 space-y-6 max-w-[1600px] w-full mx-auto">
       {/* Top Header Card */}
-      <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100">
-              Home Landing Page
-            </span>
-            <span className="text-xs text-gray-400 font-medium">
-              {formData.cards.length} Process Steps Active
-            </span>
-          </div>
-          <h1 className="text-xl font-bold text-slate-800">Process Steps Configuration</h1>
-          <p className="text-xs text-gray-500 mt-0.5">
-            Full control over the &ldquo;Our Proven Process&rdquo; section on the home landing page.
-          </p>
+          <h1 className="text-xl font-bold text-slate-800">Process Steps</h1>
         </div>
 
         <div className="flex items-center gap-3">
-          <button
-            onClick={handleResetDefaults}
-            type="button"
-            className="px-3.5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl text-xs flex items-center gap-1.5 transition-colors"
-            title="Reset to default original steps"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Reset Defaults</span>
-          </button>
-
           <button
             onClick={handleSaveSettings}
             disabled={isSaving}
@@ -632,20 +593,19 @@ export default function ProcessStepsDashboardPage() {
             <div className="border-b border-gray-100 pb-3 flex items-center justify-between">
               <h2 className="text-sm font-bold text-slate-800 flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-blue-500" />
-                <span>Section Header & Text Settings</span>
+                <span>Section Header</span>
               </h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Top Badge Text (Rich Text Editor) */}
+              {/* Top Badge Text & Size */}
               <div className="space-y-1.5 md:col-span-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold text-gray-700 flex items-center gap-1.5">
-                    <span>Top Badge Text</span>
-                    <span className="text-[10px] text-blue-600 font-medium">Rich Text Editor</span>
+                  <label className="text-xs font-semibold text-gray-700">
+                    Badge Text
                   </label>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[11px] font-medium text-gray-500">Title Size:</span>
+                    <span className="text-[11px] font-medium text-gray-500">Size:</span>
                     <select
                       value={formData.badgeFontSize || '0.75rem'}
                       onChange={(e) => handleSectionChange('badgeFontSize', e.target.value)}
@@ -671,15 +631,14 @@ export default function ProcessStepsDashboardPage() {
                 </div>
               </div>
 
-              {/* Main Heading Prefix (Rich Text Editor) */}
+              {/* Main Heading Prefix & Size */}
               <div className="space-y-1.5 md:col-span-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold text-gray-700 flex items-center gap-1.5">
-                    <span>Section Main Heading Title</span>
-                    <span className="text-[10px] text-blue-600 font-medium">Rich Text Editor</span>
+                  <label className="text-xs font-semibold text-gray-700">
+                    Heading
                   </label>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[11px] font-medium text-gray-500">Title Size:</span>
+                    <span className="text-[11px] font-medium text-gray-500">Size:</span>
                     <select
                       value={formData.headingFontSize || '3.75rem'}
                       onChange={(e) => handleSectionChange('headingFontSize', e.target.value)}
@@ -707,9 +666,8 @@ export default function ProcessStepsDashboardPage() {
 
               {/* Heading Highlight Word */}
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-700 flex items-center justify-between">
-                  <span>Highlighted Glow Word (Suffix)</span>
-                  <span className="text-[10px] text-cyan-600 font-medium">Gradient Cyan/Blue</span>
+                <label className="text-xs font-semibold text-gray-700">
+                  Highlighted Text
                 </label>
                 <input
                   type="text"
@@ -733,15 +691,14 @@ export default function ProcessStepsDashboardPage() {
               </div>
             </div>
 
-            {/* Subtitle / Description (Rich Text Editor) */}
+            {/* Subtitle / Description */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-gray-700 flex items-center gap-1.5">
-                  <span>Section Subtitle / Description</span>
-                  <span className="text-[10px] text-blue-600 font-medium">Rich Text Editor</span>
+                <label className="text-xs font-semibold text-gray-700">
+                  Description
                 </label>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[11px] font-medium text-gray-500">Title Size:</span>
+                  <span className="text-[11px] font-medium text-gray-500">Size:</span>
                   <select
                     value={formData.descriptionFontSize || '1rem'}
                     onChange={(e) => handleSectionChange('descriptionFontSize', e.target.value)}
@@ -769,7 +726,7 @@ export default function ProcessStepsDashboardPage() {
 
             {/* CTA Link */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-gray-600">CTA Button Link URL</label>
+              <label className="text-xs font-semibold text-gray-600">CTA Link</label>
               <input
                 type="text"
                 value={formData.ctaLink}
@@ -783,15 +740,10 @@ export default function ProcessStepsDashboardPage() {
           {/* Cards Management Area */}
           <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-5">
             <div className="border-b border-gray-100 pb-3 flex items-center justify-between">
-              <div>
-                <h2 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                  <Layers className="w-4 h-4 text-blue-500" />
-                  <span>Process Cards ({formData.cards.length})</span>
-                </h2>
-                <p className="text-[11px] text-gray-400 mt-0.5">
-                  Add, edit, reorder, or delete cards. Changes appear in the live preview and on the website.
-                </p>
-              </div>
+              <h2 className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                <Layers className="w-4 h-4 text-blue-500" />
+                <span>Process Cards ({formData.cards.length})</span>
+              </h2>
 
               <button
                 type="button"
@@ -799,7 +751,7 @@ export default function ProcessStepsDashboardPage() {
                 className="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold rounded-xl text-xs flex items-center gap-1.5 transition-colors border border-blue-200 shadow-sm"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>Add Step Card</span>
+                <span>Add Card</span>
               </button>
             </div>
 
@@ -824,11 +776,8 @@ export default function ProcessStepsDashboardPage() {
                         <span className="w-6 h-6 rounded-lg bg-blue-600 text-white font-mono text-[11px] font-bold flex items-center justify-center shadow-xs">
                           {card.step || `${index + 1}`.padStart(2, '0')}
                         </span>
-                        <span className="font-bold text-slate-800 text-xs truncate max-w-[200px]">
-                          {card.title || 'Untitled Step'}
-                        </span>
-                        <span className="text-[10px] text-gray-400 bg-gray-200/60 px-2 py-0.5 rounded-md font-mono">
-                          {card.tags?.length || 0} tags
+                        <span className="font-bold text-slate-800 text-xs truncate max-w-[220px]">
+                          {card.title ? card.title.replace(/<[^>]*>/g, '') : 'Untitled Step'}
                         </span>
                       </div>
 
@@ -898,7 +847,7 @@ export default function ProcessStepsDashboardPage() {
                         {/* Step Number Tag */}
                         <div className="sm:col-span-4 space-y-1">
                           <label className="text-[11px] font-semibold text-gray-500">
-                            Step Identifier
+                            Step
                           </label>
                           <input
                             type="text"
@@ -912,7 +861,7 @@ export default function ProcessStepsDashboardPage() {
                         {/* Icon Picker */}
                         <div className="sm:col-span-8 space-y-1">
                           <label className="text-[11px] font-semibold text-gray-500 flex items-center gap-1">
-                            <span>Step Icon</span>
+                            <span>Icon</span>
                             <IconComp className="w-3 h-3 text-blue-500" />
                           </label>
                           <select
@@ -932,14 +881,13 @@ export default function ProcessStepsDashboardPage() {
                       {/* Step Title (Rich Text Editor) & Size Control */}
                       <div className="space-y-1.5">
                         <div className="flex items-center justify-between">
-                          <label className="text-[11px] font-semibold text-gray-700 flex items-center gap-1.5">
-                            <span>Step Title</span>
-                            <span className="text-[10px] text-blue-600 font-medium">Rich Text</span>
+                          <label className="text-[11px] font-semibold text-gray-700">
+                            Step Title
                           </label>
 
                           {/* Font Size Selector for Step Title */}
                           <div className="flex items-center gap-1.5">
-                            <span className="text-[11px] font-medium text-gray-500">Title Size:</span>
+                            <span className="text-[11px] font-medium text-gray-500">Size:</span>
                             <select
                               value={card.titleFontSize || '3.75rem'}
                               onChange={(e) => handleCardChange(index, 'titleFontSize', e.target.value)}
@@ -969,12 +917,11 @@ export default function ProcessStepsDashboardPage() {
                       {/* Step Subtitle / Description (Rich Text Editor) */}
                       <div className="space-y-1">
                         <div className="flex items-center justify-between">
-                          <label className="text-[11px] font-semibold text-gray-600 flex items-center gap-1.5">
-                            <span>Step Subtitle / Description</span>
-                            <span className="text-[10px] text-blue-600 font-medium">Rich Text Editor</span>
+                          <label className="text-[11px] font-semibold text-gray-600">
+                            Description
                           </label>
                           <div className="flex items-center gap-1.5">
-                            <span className="text-[11px] font-medium text-gray-500">Title Size:</span>
+                            <span className="text-[11px] font-medium text-gray-500">Size:</span>
                             <select
                               value={card.descriptionFontSize || '0.875rem'}
                               onChange={(e) => handleCardChange(index, 'descriptionFontSize', e.target.value)}
@@ -1005,9 +952,8 @@ export default function ProcessStepsDashboardPage() {
                         <div className="flex items-center justify-between">
                           <label className="text-[11px] font-semibold text-gray-600 flex items-center gap-1.5">
                             <Tag className="w-3.5 h-3.5 text-blue-500" />
-                            <span>Pill Tags (Highlights)</span>
+                            <span>Tags</span>
                           </label>
-                          <span className="text-[10px] text-gray-400">Press Enter or click + to add tags</span>
                         </div>
 
                         {/* Existing tags container */}
@@ -1095,12 +1041,9 @@ export default function ProcessStepsDashboardPage() {
               <div className="flex items-center gap-2">
                 <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
                 <span className="text-xs font-bold tracking-wide uppercase text-gray-300">
-                  Live Website Preview
+                  Live Preview
                 </span>
               </div>
-              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                Matches Website
-              </span>
             </div>
 
             {/* Section Header Preview */}

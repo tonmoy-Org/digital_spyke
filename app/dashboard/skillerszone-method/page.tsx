@@ -10,7 +10,6 @@ import {
   Trash2,
   ChevronUp,
   ChevronDown,
-  RotateCcw,
   Sparkles,
   Layers,
   Copy,
@@ -542,23 +541,6 @@ export default function SkillersZoneMethodDashboardPage() {
     });
   };
 
-  // Reset to Defaults
-  const handleResetDefaults = async () => {
-    const result = await Swal.fire({
-      title: 'Reset to Defaults?',
-      text: 'This will revert all titles, subtitles, and steps to the default 5 method phases.',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#3b82f6',
-      confirmButtonText: 'Yes, reset',
-    });
-
-    if (result.isConfirmed) {
-      setFormData(JSON.parse(JSON.stringify(DEFAULT_METHOD_DATA)));
-      setPreviewStepIndex(0);
-    }
-  };
-
   // Save Settings
   const handleSaveSettings = async () => {
     setIsSaving(true);
@@ -613,7 +595,7 @@ export default function SkillersZoneMethodDashboardPage() {
     return (
       <div className="p-12 flex flex-col items-center justify-center min-h-[450px]">
         <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-3" />
-        <p className="text-gray-500 text-xs font-semibold">Loading SkillersZone Method Settings...</p>
+        <p className="text-gray-500 text-xs font-semibold">Loading SkillersZone Method...</p>
       </div>
     );
   }
@@ -625,33 +607,12 @@ export default function SkillersZoneMethodDashboardPage() {
   return (
     <main className="p-6 space-y-6 max-w-[1600px] w-full mx-auto">
       {/* Top Header Card */}
-      <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100">
-              Home Landing Page
-            </span>
-            <span className="text-xs text-gray-400 font-medium">
-              {formData.steps.length} Timeline Steps Active
-            </span>
-          </div>
-          <h1 className="text-xl font-bold text-slate-800">SkillersZone Method Configuration</h1>
-          <p className="text-xs text-gray-500 mt-0.5">
-            Full control over the &ldquo;THE SKILLERSZONE METHOD&rdquo; timeline section.
-          </p>
+          <h1 className="text-xl font-bold text-slate-800">SkillersZone Method</h1>
         </div>
 
         <div className="flex items-center gap-3">
-          <button
-            onClick={handleResetDefaults}
-            type="button"
-            className="px-3.5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl text-xs flex items-center gap-1.5 transition-colors"
-            title="Reset to default original content"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Reset Defaults</span>
-          </button>
-
           <button
             onClick={handleSaveSettings}
             disabled={isSaving}
@@ -676,7 +637,7 @@ export default function SkillersZoneMethodDashboardPage() {
             <div className="border-b border-gray-100 pb-3 flex items-center justify-between">
               <h2 className="text-sm font-bold text-slate-800 flex items-center gap-2">
                 <Compass className="w-4 h-4 text-cyan-500" />
-                <span>Section Header &amp; Text Settings</span>
+                <span>Section Header</span>
               </h2>
             </div>
 
@@ -684,12 +645,11 @@ export default function SkillersZoneMethodDashboardPage() {
               {/* Top Badge Text & Size */}
               <div className="space-y-1.5 md:col-span-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold text-gray-700 flex items-center gap-1.5">
-                    <span>Section Badge Text</span>
-                    <span className="text-[10px] text-blue-600 font-medium">Rich Text Editor</span>
+                  <label className="text-xs font-semibold text-gray-700">
+                    Badge Text
                   </label>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[11px] font-medium text-gray-500">Title Size:</span>
+                    <span className="text-[11px] font-medium text-gray-500">Size:</span>
                     <select
                       value={formData.badgeFontSize || '0.75rem'}
                       onChange={(e) => handleSectionChange('badgeFontSize', e.target.value)}
@@ -718,12 +678,11 @@ export default function SkillersZoneMethodDashboardPage() {
               {/* Main Heading Prefix & Size */}
               <div className="space-y-1.5 md:col-span-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold text-gray-700 flex items-center gap-1.5">
-                    <span>Main Heading Prefix</span>
-                    <span className="text-[10px] text-blue-600 font-medium">Rich Text Editor</span>
+                  <label className="text-xs font-semibold text-gray-700">
+                    Heading
                   </label>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[11px] font-medium text-gray-500">Title Size:</span>
+                    <span className="text-[11px] font-medium text-gray-500">Size:</span>
                     <select
                       value={formData.headingFontSize || '3.75rem'}
                       onChange={(e) => handleSectionChange('headingFontSize', e.target.value)}
@@ -751,9 +710,8 @@ export default function SkillersZoneMethodDashboardPage() {
 
               {/* Heading Highlight Word */}
               <div className="space-y-1.5 md:col-span-2">
-                <label className="text-xs font-semibold text-gray-700 flex items-center justify-between">
-                  <span>Highlighted Glow Words (Suffix)</span>
-                  <span className="text-[10px] text-emerald-600 font-medium">Gradient Emerald/Cyan/Purple</span>
+                <label className="text-xs font-semibold text-gray-700">
+                  Highlighted Text
                 </label>
                 <input
                   type="text"
@@ -767,12 +725,11 @@ export default function SkillersZoneMethodDashboardPage() {
               {/* Subtitle / Description & Size */}
               <div className="space-y-1.5 md:col-span-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold text-gray-700 flex items-center gap-1.5">
-                    <span>Section Subtitle / Description</span>
-                    <span className="text-[10px] text-blue-600 font-medium">Rich Text Editor</span>
+                  <label className="text-xs font-semibold text-gray-700">
+                    Description
                   </label>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[11px] font-medium text-gray-500">Title Size:</span>
+                    <span className="text-[11px] font-medium text-gray-500">Size:</span>
                     <select
                       value={formData.descriptionFontSize || '1.125rem'}
                       onChange={(e) => handleSectionChange('descriptionFontSize', e.target.value)}
@@ -803,15 +760,10 @@ export default function SkillersZoneMethodDashboardPage() {
           {/* Timeline Steps Management */}
           <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-5">
             <div className="border-b border-gray-100 pb-3 flex items-center justify-between">
-              <div>
-                <h2 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                  <Layers className="w-4 h-4 text-blue-500" />
-                  <span>Timeline Steps ({formData.steps.length})</span>
-                </h2>
-                <p className="text-[11px] text-gray-400 mt-0.5">
-                  Full control over step tag, category, icon, title, description, and checklist deliverables.
-                </p>
-              </div>
+              <h2 className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                <Layers className="w-4 h-4 text-blue-500" />
+                <span>Timeline Steps ({formData.steps.length})</span>
+              </h2>
 
               <button
                 type="button"
@@ -819,7 +771,7 @@ export default function SkillersZoneMethodDashboardPage() {
                 className="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold rounded-xl text-xs flex items-center gap-1.5 transition-colors border border-blue-200 shadow-sm"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>Add Method Step</span>
+                <span>Add Step</span>
               </button>
             </div>
 
@@ -848,11 +800,8 @@ export default function SkillersZoneMethodDashboardPage() {
                         <span className="text-[11px] font-bold font-mono text-cyan-600 bg-cyan-50 border border-cyan-200 px-2 py-0.5 rounded-md">
                           {step.stepTag || `STEP ${index + 1}`}
                         </span>
-                        <span className="font-bold text-slate-800 text-xs truncate max-w-[180px]">
-                          {step.title || 'Untitled Step'}
-                        </span>
-                        <span className="text-[10px] text-gray-400 bg-gray-200/60 px-2 py-0.5 rounded-md font-mono">
-                          {step.checklist?.length || 0} checks
+                        <span className="font-bold text-slate-800 text-xs truncate max-w-[220px]">
+                          {step.title ? step.title.replace(/<[^>]*>/g, '') : 'Untitled Step'}
                         </span>
                       </div>
 
@@ -922,7 +871,7 @@ export default function SkillersZoneMethodDashboardPage() {
                         {/* Step Tag Identifier */}
                         <div className="sm:col-span-3 space-y-1">
                           <label className="text-[11px] font-semibold text-gray-500">
-                            Step Tag (e.g. STEP 1)
+                            Step Tag
                           </label>
                           <input
                             type="text"
@@ -936,7 +885,7 @@ export default function SkillersZoneMethodDashboardPage() {
                         {/* Category Name */}
                         <div className="sm:col-span-3 space-y-1">
                           <label className="text-[11px] font-semibold text-gray-500">
-                            Category Title
+                            Category
                           </label>
                           <input
                             type="text"
@@ -951,7 +900,7 @@ export default function SkillersZoneMethodDashboardPage() {
                         <div className="sm:col-span-3 space-y-1">
                           <label className="text-[11px] font-semibold text-gray-500 flex items-center gap-1">
                             <Palette className="w-3 h-3 text-cyan-500" />
-                            <span>Color Theme</span>
+                            <span>Color</span>
                           </label>
                           <select
                             value={step.categoryColor || 'cyan'}
@@ -969,7 +918,7 @@ export default function SkillersZoneMethodDashboardPage() {
                         {/* Step Icon */}
                         <div className="sm:col-span-3 space-y-1">
                           <label className="text-[11px] font-semibold text-gray-500 flex items-center gap-1">
-                            <span>Step Icon</span>
+                            <span>Icon</span>
                             <IconComp className="w-3.5 h-3.5 text-cyan-600" />
                           </label>
                           <select
@@ -989,13 +938,12 @@ export default function SkillersZoneMethodDashboardPage() {
                       {/* Step Title & Size */}
                       <div className="space-y-1.5">
                         <div className="flex items-center justify-between">
-                          <label className="text-[11px] font-semibold text-gray-700 flex items-center gap-1.5">
-                            <span>Step Title</span>
-                            <span className="text-[10px] text-blue-600 font-medium">Rich Text</span>
+                          <label className="text-[11px] font-semibold text-gray-700">
+                            Step Title
                           </label>
 
                           <div className="flex items-center gap-1.5">
-                            <span className="text-[11px] font-medium text-gray-500">Title Size:</span>
+                            <span className="text-[11px] font-medium text-gray-500">Size:</span>
                             <select
                               value={step.titleFontSize || '1.5rem'}
                               onChange={(e) => handleStepChange(index, 'titleFontSize', e.target.value)}
@@ -1025,12 +973,11 @@ export default function SkillersZoneMethodDashboardPage() {
                       {/* Step Subtitle / Description & Size */}
                       <div className="space-y-1">
                         <div className="flex items-center justify-between">
-                          <label className="text-[11px] font-semibold text-gray-600 flex items-center gap-1.5">
-                            <span>Step Subtitle / Description</span>
-                            <span className="text-[10px] text-blue-600 font-medium">Rich Text Editor</span>
+                          <label className="text-[11px] font-semibold text-gray-600">
+                            Description
                           </label>
                           <div className="flex items-center gap-1.5">
-                            <span className="text-[11px] font-medium text-gray-500">Title Size:</span>
+                            <span className="text-[11px] font-medium text-gray-500">Size:</span>
                             <select
                               value={step.descriptionFontSize || '0.875rem'}
                               onChange={(e) => handleStepChange(index, 'descriptionFontSize', e.target.value)}
@@ -1061,9 +1008,8 @@ export default function SkillersZoneMethodDashboardPage() {
                         <div className="flex items-center justify-between">
                           <label className="text-[11px] font-semibold text-gray-600 flex items-center gap-1.5">
                             <CheckSquare className="w-3.5 h-3.5 text-emerald-500" />
-                            <span>Checklist Deliverables</span>
+                            <span>Deliverables Checklist</span>
                           </label>
-                          <span className="text-[10px] text-gray-400">Key deliverables checked off in this phase</span>
                         </div>
 
                         {/* List of items */}
@@ -1107,7 +1053,7 @@ export default function SkillersZoneMethodDashboardPage() {
                                   handleAddChecklist(index);
                                 }
                               }}
-                              placeholder="Add deliverable check item..."
+                              placeholder="Add deliverable..."
                               className="flex-1 px-3 py-1.5 text-xs border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
                             />
                             <button
@@ -1141,12 +1087,9 @@ export default function SkillersZoneMethodDashboardPage() {
               <div className="flex items-center gap-2">
                 <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
                 <span className="text-xs font-bold tracking-wide uppercase text-gray-300">
-                  Live Website Preview
+                  Live Preview
                 </span>
               </div>
-              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                Matches Website
-              </span>
             </div>
 
             {/* Section Header Preview */}
