@@ -6,6 +6,20 @@ body {
   /* @apply bg-body-bg; */
 }
 
+/* Hide scrollbar globally across Chrome, Safari, Firefox, IE, and Edge */
+html, body, * {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, and Opera */
+  width: 0px;
+  height: 0px;
+}
+
 
 @keyframes fade-in-up {
   from {
