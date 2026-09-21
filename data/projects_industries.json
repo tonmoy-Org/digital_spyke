@@ -1,0 +1,134 @@
+{
+  "headingHtml": "<p>Experience in <span style=\"background-color: initial; color: transparent;\">dozens of industries</span></p>",
+  "headingFontSize": "2.5rem",
+  "descriptionHtml": "<p>We’re relentlessly curious, fast learners with leading work samples in everything from sport to SaaS.</p>",
+  "descriptionFontSize": "1rem",
+  "speedRow1": 30,
+  "speedRow2": 30,
+  "pauseOnHover": true,
+  "points": [
+    {
+      "id": "point-1",
+      "number": "01",
+      "iconType": "lucide",
+      "iconValue": "Zap",
+      "text": "We don't just build, we research, strategize, and <span style=\"background: linear-gradient(to right, #00FFAB, #6B46FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: transparent;\">write</span>.",
+      "fontSize": "1rem"
+    },
+    {
+      "id": "point-2",
+      "number": "02",
+      "iconType": "lucide",
+      "iconValue": "Navigation",
+      "text": "Our clients lead their fields in design sophistication.",
+      "fontSize": "1rem"
+    }
+  ],
+  "images": [
+    {
+      "id": "img-1790017622947-0",
+      "src": "/uploads/concerns/WhatsApp_Image_2026-09-19_at_6_24_23_PM-1790017622943.jpeg",
+      "alt": "WhatsApp Image 2026-09-19 at 6.24.23 PM",
+      "row": 1,
+      "url": ""
+    },
+    {
+      "id": "img-1",
+      "src": "https://cdn.prod.website-files.com/67a50705034192fdd7cff037/67aa1a8113c902ed9be24cb3_Website%20Hero%20-%206.jpg",
+      "alt": "Portfolio project 1",
+      "row": 1,
+      "url": ""
+    },
+    {
+      "id": "img-2",
+      "src": "https://cdn.prod.website-files.com/67a50705034192fdd7cff037/67aa1aa734161be9e87e9635_Website%20Hero%20-%2011.jpg",
+      "alt": "Portfolio project 2",
+      "row": 1,
+      "url": ""
+    },
+    {
+      "id": "img-3",
+      "src": "https://cdn.prod.website-files.com/67a50705034192fdd7cff037/67aa1a9d6a929aa988b03f0c_Website%20Hero%20-%209.jpg",
+      "alt": "Portfolio project 3",
+      "row": 1,
+      "url": ""
+    },
+    {
+      "id": "img-4",
+      "src": "https://cdn.prod.website-files.com/67a50705034192fdd7cff037/67aa1547c258695b6bd21dab_Website%20Hero%20-%201.jpg",
+      "alt": "Portfolio project 4",
+      "row": 1,
+      "url": ""
+    },
+    {
+      "id": "img-5",
+      "src": "https://cdn.prod.website-files.com/67a50705034192fdd7cff037/67aa1a713d1b552dcd0f9f04_Website%20Hero%20-%205.jpg",
+      "alt": "Portfolio project 5",
+      "row": 1,
+      "url": ""
+    },
+    {
+      "id": "img-6",
+      "src": "https://cdn.prod.website-files.com/67a50705034192fdd7cff037/688a8c61d46fba51230bfa4c_Website%20Hero%20-%2013.jpg",
+      "alt": "Portfolio project 6",
+      "row": 1,
+      "url": ""
+    },
+    {
+      "id": "img-7",
+      "src": "https://cdn.prod.website-files.com/67a50705034192fdd7cff037/688a8c6d48f910d5ccb7e5f4_Website%20Hero%20-%2014.jpg",
+      "alt": "Portfolio project 7",
+      "row": 1,
+      "url": ""
+    },
+    {
+      "id": "img-8",
+      "src": "https://cdn.prod.website-files.com/67a50705034192fdd7cff037/688a8c9f36eea2366ebb18d2_Website%20Hero%20-%2015.jpg",
+      "alt": "Portfolio project 8",
+      "row": 2,
+      "url": ""
+    },
+    {
+      "id": "img-9",
+      "src": "https://cdn.prod.website-files.com/67a50705034192fdd7cff037/688a8ca84778afa4ffa5d957_Website%20Hero%20-%2016.jpg",
+      "alt": "Portfolio project 9",
+      "row": 2,
+      "url": ""
+    },
+    {
+      "id": "img-10",
+      "src": "https://cdn.prod.website-files.com/67a50705034192fdd7cff037/688a8cb1461adcdb7b19e595_Website%20Hero%20-%2017.jpg",
+      "alt": "Portfolio project 10",
+      "row": 2,
+      "url": ""
+    },
+    {
+      "id": "img-11",
+      "src": "https://cdn.prod.website-files.com/67a50705034192fdd7cff037/688a8cb9aef259f32c2c1817_Website%20Hero%20-%2018.jpg",
+      "alt": "Portfolio project 11",
+      "row": 2,
+      "url": ""
+    },
+    {
+      "id": "img-12",
+      "src": "https://cdn.prod.website-files.com/67a50705034192fdd7cff037/688a8cc232871b19eb0dcad4_Website%20Hero%20-%2019.jpg",
+      "alt": "Portfolio project 12",
+      "row": 2,
+      "url": ""
+    },
+    {
+      "id": "img-13",
+      "src": "https://cdn.prod.website-files.com/67a50705034192fdd7cff037/67aa1a5358db9538fc8a22f6_Website%20Hero%20-%202.jpg",
+      "alt": "Portfolio project 13",
+      "row": 2,
+      "url": ""
+    },
+    {
+      "id": "img-14",
+      "src": "https://cdn.prod.website-files.com/67a50705034192fdd7cff037/67aa1a938f84c5a9fd7966e1_Website%20Hero%20-%208.jpg",
+      "alt": "Portfolio project 14",
+      "row": 2,
+      "url": ""
+    }
+  ]
+}

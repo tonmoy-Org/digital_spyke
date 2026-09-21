@@ -15,6 +15,8 @@ import {
   Workflow,
   Sparkles,
   Compass,
+  Building2,
+  FolderKanban,
 } from 'lucide-react';
 import logo from '@/public/logo/logo3.png';
 
@@ -116,8 +118,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               onClick={() => setIsHomeSubmenuOpen(!isHomeSubmenuOpen)}
               className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all ${
                 pathname?.startsWith('/dashboard/hero-banner') ||
+                pathname?.startsWith('/dashboard/our-concerns') ||
                 pathname?.startsWith('/dashboard/process-steps') ||
                 pathname?.startsWith('/dashboard/what-we-deliver') ||
+                pathname?.startsWith('/dashboard/projects-industries') ||
                 pathname?.startsWith('/dashboard/skillerszone-method')
                   ? 'text-white font-semibold bg-white/10'
                   : 'text-gray-400 hover:text-white hover:bg-white/5'
@@ -151,6 +155,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   <span>Hero Banner</span>
                 </Link>
 
+                {/* Our Concerns Settings */}
+                <Link
+                  href="/dashboard/our-concerns"
+                  className={`flex items-center gap-2 py-1.5 px-3 rounded-lg transition-colors ${
+                    pathname === '/dashboard/our-concerns'
+                      ? 'text-blue-400 font-bold bg-blue-500/10'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  <Building2 className="w-3.5 h-3.5" />
+                  <span>Our Concerns</span>
+                </Link>
+
                 {/* Process Steps Settings */}
                 <Link
                   href="/dashboard/process-steps"
@@ -175,6 +192,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 >
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>What We Deliver</span>
+                </Link>
+
+                {/* Projects & Industries Settings */}
+                <Link
+                  href="/dashboard/projects-industries"
+                  className={`flex items-center gap-2 py-1.5 px-3 rounded-lg transition-colors ${
+                    pathname === '/dashboard/projects-industries'
+                      ? 'text-blue-400 font-bold bg-blue-500/10'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  <FolderKanban className="w-3.5 h-3.5" />
+                  <span>Projects & Industries</span>
                 </Link>
 
                 {/* The SkillersZone Method Settings */}

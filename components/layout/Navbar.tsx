@@ -110,10 +110,10 @@ const Navbar = () => {
             <nav
                 aria-label="Main navigation"
                 className={cn(
-                    "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out px-4 sm:px-6 md:px-10",
+                    "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out px-4 sm:px-6 md:px-10 bg-transparent",
                     isScrolled && !drawerOpen
-                        ? "bg-[#091021]/90 backdrop-blur-md border-b border-white/10 shadow-md py-2 sm:py-2.5"
-                        : "bg-transparent py-3 sm:py-3.5"
+                        ? "py-2 sm:py-2.5"
+                        : "py-3 sm:py-3.5"
                 )}
             >
                 <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-3">
@@ -207,12 +207,37 @@ const Navbar = () => {
                         }}
                         className="fixed inset-0 z-40 h-full w-full overflow-hidden bg-[#091021] shadow-2xl"
                     >
-                        {/* Clean Zero-Lag Radial Gradient Ambient Backdrop */}
+                        {/* Aceternity UI Grid Background */}
                         <div
-                            className="absolute inset-0 pointer-events-none opacity-40"
+                            className={cn(
+                                "pointer-events-none absolute inset-0",
+                                "[background-size:30px_30px] sm:[background-size:40px_40px]",
+                                "[background-image:linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)]",
+                                "dark:[background-image:linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)]"
+                            )}
+                        />
+                        {/* Aceternity UI Radial Gradient Mask for Faded Vignette Look */}
+                        <div
+                            className="pointer-events-none absolute inset-0 flex items-center justify-center bg-[#091021] [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"
+                            style={{
+                                WebkitMaskImage: 'radial-gradient(ellipse at center, transparent 20%, black)',
+                                maskImage: 'radial-gradient(ellipse at center, transparent 20%, black)'
+                            }}
+                        />
+                        {/* Subtle ambient accent glow */}
+                        <div
+                            className="pointer-events-none absolute inset-0 opacity-30"
                             style={{
                                 background: 'radial-gradient(circle at 20% 20%, rgba(29, 78, 216, 0.25) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(30, 64, 175, 0.15) 0%, transparent 50%)'
                             }}
+                        />
+
+                        {/* Pretty Dark Shadow Vignette & Soft Gradient Depth */}
+                        <div
+                            className="pointer-events-none absolute inset-0 shadow-[inset_0_0_80px_rgba(0,0,0,0.6)] sm:shadow-[inset_0_0_150px_rgba(0,0,0,0.75)]"
+                        />
+                        <div
+                            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-black/45"
                         />
 
                         {/* Scroll container */}
@@ -258,7 +283,7 @@ const Navbar = () => {
                                                                 <circle cx="6" cy="6" r="6" fill="currentColor"></circle>
                                                             </svg>
                                                         </span>
-                                                        <span className="text-3xl font-medium tracking-tight transition-transform duration-300 group-hover:translate-x-2 sm:text-4xl md:text-5xl lg:text-6xl">
+                                                        <span className="text-3xl font-medium tracking-tight transition-transform duration-300 group-hover:translate-x-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:text-4xl md:text-5xl lg:text-6xl">
                                                             {text}
                                                         </span>
                                                     </div>
@@ -278,9 +303,6 @@ const Navbar = () => {
                                 </Link>
 
                                 <div className="mt-auto pt-8">
-                                    {/* Divider Line */}
-                                    <div className="my-4 border-t border-gray-800"></div>
-
                                     {/* Newsletter & Contact */}
                                     <div className="flex flex-col items-start justify-between gap-8 pb-2 md:flex-row md:gap-10">
                                         {/* Left: Newsletter */}

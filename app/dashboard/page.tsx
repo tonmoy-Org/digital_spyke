@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { LayoutDashboard, Sliders, ArrowRight, Sparkles } from 'lucide-react';
+import { LayoutDashboard, Sliders, ArrowRight, Sparkles, Building2, FolderKanban } from 'lucide-react';
 
 export default function DashboardPage() {
   return (
@@ -47,6 +47,50 @@ export default function DashboardPage() {
 
           <div className="flex items-center gap-1 text-xs font-bold text-blue-600 group-hover:translate-x-1 transition-transform">
             <span>Manage Hero Banner</span>
+            <ArrowRight className="w-4 h-4" />
+          </div>
+        </Link>
+
+        <Link
+          href="/dashboard/our-concerns"
+          className="group bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-blue-200 transition-all flex flex-col justify-between space-y-4"
+        >
+          <div className="space-y-3">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center font-bold">
+              <Building2 className="w-5 h-5" />
+            </div>
+            <h2 className="text-base font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">
+              Our Concerns & Partners
+            </h2>
+            <p className="text-xs text-gray-500 leading-relaxed">
+              Manage marquee logos, brand presets, titles, subtitles, links, speeds, and icons dynamically from the admin panel.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-1 text-xs font-bold text-indigo-600 group-hover:translate-x-1 transition-transform">
+            <span>Manage Concerns</span>
+            <ArrowRight className="w-4 h-4" />
+          </div>
+        </Link>
+
+        <Link
+          href="/dashboard/projects-industries"
+          className="group bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-blue-200 transition-all flex flex-col justify-between space-y-4"
+        >
+          <div className="space-y-3">
+            <div className="w-10 h-10 rounded-xl bg-purple-50 border border-purple-100 text-purple-600 flex items-center justify-center font-bold">
+              <FolderKanban className="w-5 h-5" />
+            </div>
+            <h2 className="text-base font-bold text-slate-800 group-hover:text-purple-600 transition-colors">
+              Projects & Industries
+            </h2>
+            <p className="text-xs text-gray-500 leading-relaxed">
+              Edit industry headings with rich text, configure highlight points (01, 02), and upload portfolio project images from device.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-1 text-xs font-bold text-purple-600 group-hover:translate-x-1 transition-transform">
+            <span>Manage Projects</span>
             <ArrowRight className="w-4 h-4" />
           </div>
         </Link>
