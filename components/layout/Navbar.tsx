@@ -3,18 +3,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import logo from '@/public/logo/logo3.png';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { TextField, Button, Typography, Stack } from '@mui/material';
+import { TextField, Button, Typography } from '@mui/material';
 
 import { cn } from "@/lib/utils";
-import { InteractiveGridPattern } from "@/components/magicui/interactive-grid-pattern";
 
 const NAV_LINKS = [
     { text: "Home", href: "/" },
     { text: "About Us", href: "/about" },
-    // { text: "Portfolio", href: "/projects" },
     { text: "Blogs", href: "/blog" },
     { text: "Contact", href: "/contact" },
     { text: "Dashboard", href: "/dashboard" },
@@ -28,17 +27,22 @@ const Navbar = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const pathname = usePathname();
 
-    // Do not render frontend Navbar on Dashboard or Login pages
-    if (pathname?.startsWith('/dashboard') || pathname?.startsWith('/login')) {
-        return null;
-    }
+    const handleCloseDrawer = useCallback(() => setDrawerOpen(false), []);
+    const toggleDrawer = useCallback(() => setDrawerOpen((prev) => !prev), []);
 
-    const toggleDrawer = () => setDrawerOpen((prev) => !prev);
-    const handleCloseDrawer = () => setDrawerOpen(false);
-
-    // Track scroll position (passive listener = smoother scrolling on mobile)
+    // Optimized scroll tracking using requestAnimationFrame to prevent re-render lag
     useEffect(() => {
-        const handleScroll = () => setIsScrolled(window.scrollY > 50);
+        let ticking = false;
+        const handleScroll = () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const scrolled = window.scrollY > 20;
+                    setIsScrolled((prev) => (prev !== scrolled ? scrolled : prev));
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
         handleScroll();
         window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
@@ -49,16 +53,6 @@ const Navbar = () => {
         setDrawerOpen(false);
     }, [pathname]);
 
-    // Lock page scroll while the drawer is open (prevents background scrolling on mobile)
-    useEffect(() => {
-        if (!drawerOpen) return;
-        const previousOverflow = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
-        return () => {
-            document.body.style.overflow = previousOverflow;
-        };
-    }, [drawerOpen]);
-
     // Close the drawer with the Escape key
     useEffect(() => {
         if (!drawerOpen) return;
@@ -68,6 +62,11 @@ const Navbar = () => {
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [drawerOpen]);
+
+    // Do not render frontend Navbar on Dashboard or Login pages (After hooks to comply with React rules)
+    if (pathname?.startsWith('/dashboard') || pathname?.startsWith('/login')) {
+        return null;
+    }
 
     const handleSubscribe = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -110,50 +109,37 @@ const Navbar = () => {
             {/* ───────────── Top bar ───────────── */}
             <nav
                 aria-label="Main navigation"
-                className="shadow-none fixed top-0 left-0 right-0 z-50 px-4 py-3 sm:px-6 md:px-10"
+                className={cn(
+                    "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out px-4 sm:px-6 md:px-10",
+                    isScrolled && !drawerOpen
+                        ? "bg-[#091021]/90 backdrop-blur-md border-b border-white/10 shadow-md py-2 sm:py-2.5"
+                        : "bg-transparent py-3 sm:py-3.5"
+                )}
             >
-                <div className="flex items-center justify-between gap-3">
-                    {/* Logo */}
-                    <div className="w-32 shrink-0 sm:w-40 md:w-48">
-                        <Link prefetch={true} href="/" aria-label="Digital Spyke home" onClick={handleCloseDrawer}>
-                            {isScrolled && !drawerOpen ? (
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-9 w-9 text-white md:h-10 md:w-10"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    aria-hidden="true"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
-                                    />
-                                </svg>
-                            ) : (
-                                <Image
-                                    src={logo}
-                                    alt="Digital Spyke Logo"
-                                    width={276}
-                                    height={200}
-                                    priority
-                                    style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
-                                />
-                            )}
+                <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-3">
+                    {/* Compact & Clean Logo */}
+                    <div className="flex items-center shrink-0">
+                        <Link prefetch={true} href="/" aria-label="Digital Spyke home" onClick={handleCloseDrawer} className="flex items-center">
+                            <Image
+                                src={logo}
+                                alt="Digital Spyke Logo"
+                                width={190}
+                                height={52}
+                                priority
+                                className="h-9 sm:h-10 md:h-11 w-auto object-contain transition-all duration-300"
+                            />
                         </Link>
                     </div>
 
                     {/* Actions */}
                     <div className="flex items-center gap-2 sm:gap-3">
-                        {/* CTA: hidden on very small phones (it's repeated inside the drawer) */}
+                        {/* CTA: hidden on very small phones (repeated inside drawer) */}
                         <Link
                             href="/book-meeting"
                             onClick={handleCloseDrawer}
                             className={cn(
                                 "hidden min-[400px]:inline-flex items-center justify-center whitespace-nowrap rounded-full",
-                                "px-3.5 py-2 text-xs font-medium sm:px-4 sm:text-sm transition-colors",
+                                "px-3.5 py-1.5 text-xs font-medium sm:px-4 sm:py-2 sm:text-sm transition-colors",
                                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70",
                                 drawerOpen
                                     ? "bg-gray-800 text-white hover:bg-gray-600"
@@ -163,7 +149,7 @@ const Navbar = () => {
                             Start a Project
                         </Link>
 
-                        {/* Hamburger / close button (44px touch target on mobile) */}
+                        {/* Hamburger / close button (compact 36px-40px touch button) */}
                         <button
                             type="button"
                             onClick={toggleDrawer}
@@ -171,7 +157,7 @@ const Navbar = () => {
                             aria-expanded={drawerOpen}
                             aria-controls="mobile-drawer"
                             className={cn(
-                                "flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-white transition-colors md:h-10 md:w-10",
+                                "flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white transition-colors sm:h-10 sm:w-10",
                                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70",
                                 drawerOpen ? "bg-gray-800 hover:bg-gray-600" : "bg-[#1D4ED8] hover:bg-[#1e40af]"
                             )}
@@ -179,7 +165,7 @@ const Navbar = () => {
                             {drawerOpen ? (
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6 rotate-90 transform transition-transform duration-300"
+                                    className="h-5 w-5 rotate-90 transform transition-transform duration-300"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
@@ -190,7 +176,7 @@ const Navbar = () => {
                             ) : (
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6 transform transition-transform duration-300"
+                                    className="h-5 w-5 transform transition-transform duration-300"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
@@ -204,227 +190,199 @@ const Navbar = () => {
                 </div>
             </nav>
 
-            {/* ───────────── Full-screen drawer ───────────── */}
-            <div
-                id="mobile-drawer"
-                role="dialog"
-                aria-modal="true"
-                aria-label="Site menu"
-                aria-hidden={!drawerOpen}
-                className={cn(
-                    // 100dvh = real visible height on mobile browsers (handles the collapsing address bar)
-                    "fixed inset-x-0 top-0 z-40 h-[100dvh] overflow-hidden bg-[#091021]",
-                    "transform transition-[transform,visibility] duration-500 ease-in-out",
-                    drawerOpen ? "visible translate-y-0 shadow-2xl" : "invisible -translate-y-full"
-                )}
-            >
-                {/* Interactive Grid Pattern Background */}
-                <InteractiveGridPattern
-                    className={cn(
-                        "[mask-image:radial-gradient(600px_circle_at_center,white,transparent)]",
-                        "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12 opacity-70"
-                    )}
-                />
+            {/* ───────────── Full-screen drawer with Framer Motion Animation ───────────── */}
+            <AnimatePresence>
+                {drawerOpen && (
+                    <motion.div
+                        id="mobile-drawer"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Site menu"
+                        initial={{ y: "-100%" }}
+                        animate={{ y: "0%" }}
+                        exit={{ y: "-100%" }}
+                        transition={{
+                            duration: 0.28,
+                            ease: [0.16, 1, 0.3, 1],
+                        }}
+                        className="fixed inset-0 z-40 h-full w-full overflow-hidden bg-[#091021] shadow-2xl"
+                    >
+                        {/* Clean Zero-Lag Radial Gradient Ambient Backdrop */}
+                        <div
+                            className="absolute inset-0 pointer-events-none opacity-40"
+                            style={{
+                                background: 'radial-gradient(circle at 20% 20%, rgba(29, 78, 216, 0.25) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(30, 64, 175, 0.15) 0%, transparent 50%)'
+                            }}
+                        />
 
-                {/* Scroll container: lets short screens / landscape phones scroll the menu */}
-                <div className="relative z-10 h-full w-full overflow-y-auto overflow-x-hidden overscroll-contain">
-                    <div className="mx-auto flex min-h-full w-full max-w-[1600px] flex-col px-6 pb-[max(2rem,env(safe-area-inset-bottom))] pt-24 sm:px-10 md:px-12 lg:px-20">
-                        {/* Navigation Links */}
-                        <nav aria-label="Site menu" className="flex flex-col space-y-1 md:space-y-2">
-                            {NAV_LINKS.map(({ text, href }) => {
-                                const isActive = pathname === href;
+                        {/* Scroll container */}
+                        <div className="relative z-10 h-full w-full overflow-y-auto overflow-x-hidden overscroll-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                            <div className="mx-auto flex min-h-full w-full max-w-[1600px] flex-col px-6 pb-[max(2rem,env(safe-area-inset-bottom))] pt-20 sm:px-10 md:px-12 lg:px-20">
+                                {/* Navigation Links with Smooth Staggered Animation */}
+                                <nav aria-label="Site menu" className="flex flex-col space-y-1 md:space-y-2">
+                                    {NAV_LINKS.map(({ text, href }, index) => {
+                                        const isActive = pathname === href;
 
-                                return (
-                                    <Link
-                                        key={text}
-                                        href={href}
-                                        onClick={handleCloseDrawer}
-                                        aria-current={isActive ? "page" : undefined}
-                                        className="group rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1D4ED8]"
-                                    >
-                                        <div
-                                            className={cn(
-                                                "flex cursor-pointer items-center justify-start gap-3 py-2.5 transition-all duration-300 md:py-2",
-                                                isActive
-                                                    ? "font-bold text-[#1D4ED8]"
-                                                    : "text-white hover:text-[#1D4ED8] active:text-[#1D4ED8]"
+                                        return (
+                                            <motion.div
+                                                key={text}
+                                                initial={{ y: 20, opacity: 0 }}
+                                                animate={{ y: 0, opacity: 1 }}
+                                                transition={{
+                                                    duration: 0.3,
+                                                    delay: 0.08 + index * 0.04,
+                                                    ease: "easeOut",
+                                                }}
+                                            >
+                                                <Link
+                                                    href={href}
+                                                    onClick={handleCloseDrawer}
+                                                    aria-current={isActive ? "page" : undefined}
+                                                    className="group rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1D4ED8]"
+                                                >
+                                                    <div
+                                                        className={cn(
+                                                            "flex cursor-pointer items-center justify-start gap-3 py-2 sm:py-2.5 transition-all duration-300",
+                                                            isActive
+                                                                ? "font-bold text-[#1D4ED8]"
+                                                                : "text-white hover:text-[#1D4ED8] active:text-[#1D4ED8]"
+                                                        )}
+                                                    >
+                                                        <span
+                                                            className={cn(
+                                                                "transition-opacity duration-300",
+                                                                isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                                                            )}
+                                                        >
+                                                            <svg className="h-2.5 w-2.5 text-[#1D4ED8] md:h-3 md:w-3" viewBox="0 0 12 12" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                                                <circle cx="6" cy="6" r="6" fill="currentColor"></circle>
+                                                            </svg>
+                                                        </span>
+                                                        <span className="text-3xl font-medium tracking-tight transition-transform duration-300 group-hover:translate-x-2 sm:text-4xl md:text-5xl lg:text-6xl">
+                                                            {text}
+                                                        </span>
+                                                    </div>
+                                                </Link>
+                                            </motion.div>
+                                        );
+                                    })}
+                                </nav>
+
+                                {/* CTA shown inside the drawer only on very small phones */}
+                                <Link
+                                    href="/book-meeting"
+                                    onClick={handleCloseDrawer}
+                                    className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-[#1D4ED8] px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-[#1e40af] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 min-[400px]:hidden"
+                                >
+                                    Start a Project
+                                </Link>
+
+                                <div className="mt-auto pt-8">
+                                    {/* Divider Line */}
+                                    <div className="my-4 border-t border-gray-800"></div>
+
+                                    {/* Newsletter & Contact */}
+                                    <div className="flex flex-col items-start justify-between gap-8 pb-2 md:flex-row md:gap-10">
+                                        {/* Left: Newsletter */}
+                                        <div className="w-full md:w-1/2 lg:w-7/12">
+                                            <Typography
+                                                variant="h6"
+                                                sx={{ color: '#fff', mb: 2, fontSize: { xs: '1.05rem', md: '1.3rem' }, fontWeight: 500, lineHeight: 1.35 }}
+                                            >
+                                                Stay Updated with Our Latest News and Offers
+                                            </Typography>
+
+                                            <form onSubmit={handleSubscribe} noValidate>
+                                                <TextField
+                                                    type="email"
+                                                    value={email}
+                                                    onChange={(e) => setEmail(e.target.value)}
+                                                    placeholder="Enter your email"
+                                                    variant="standard"
+                                                    size="small"
+                                                    fullWidth
+                                                    autoComplete="email"
+                                                    slotProps={{
+                                                        htmlInput: {
+                                                            'aria-label': 'Email address',
+                                                            inputMode: 'email',
+                                                        },
+                                                    }}
+                                                    sx={{
+                                                        input: { color: '#fff', fontSize: '16px' },
+                                                        mb: 2,
+                                                        width: '100%',
+                                                        '& .MuiInput-underline:before': { borderBottomColor: '#1D4ED8' },
+                                                        '& .MuiInput-underline:hover:before': { borderBottomColor: '#1D4ED8' },
+                                                        '& .MuiInput-underline:after': { borderBottomColor: '#1D4ED8' },
+                                                    }}
+                                                />
+
+                                                <div className="flex items-center gap-2">
+                                                    <Button
+                                                        type="submit"
+                                                        variant="contained"
+                                                        disabled={isSubmitting}
+                                                        className="group inline-flex items-center gap-2"
+                                                        sx={{
+                                                            backgroundColor: '#1D4ED8',
+                                                            color: 'white',
+                                                            padding: '8px 24px',
+                                                            minHeight: '44px',
+                                                            borderRadius: '50px',
+                                                            fontSize: '0.9rem',
+                                                            fontWeight: '500',
+                                                            textTransform: 'none',
+                                                            transition: 'all 0.3s ease',
+                                                            '&:hover': { backgroundColor: '#1e40af' },
+                                                            '&.Mui-disabled': {
+                                                                color: 'rgba(255,255,255,0.7)',
+                                                                backgroundColor: 'rgba(29, 78, 216, 0.6)',
+                                                            },
+                                                        }}
+                                                    >
+                                                        <span>{isSubmitting ? 'Sending…' : 'Subscribe'}</span>
+                                                        <ArrowForwardIcon sx={{ fontSize: '1.1rem', transition: 'transform 0.3s ease', '.group:hover &': { transform: 'translateX(4px)' } }} />
+                                                    </Button>
+                                                </div>
+                                            </form>
+
+                                            {message && (
+                                                <Typography role="status" aria-live="polite" variant="body2" sx={{ color: "#1D4ED8", mt: 1.5 }}>
+                                                    {message}
+                                                </Typography>
                                             )}
-                                        >
-                                            {/* Dot: always visible for the active page, on hover for the rest */}
-                                            <span
-                                                className={cn(
-                                                    "transition-opacity duration-300",
-                                                    isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-                                                )}
-                                            >
-                                                <svg className="h-2.5 w-2.5 text-[#1D4ED8] md:h-3 md:w-3" viewBox="0 0 12 12" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                                    <circle cx="6" cy="6" r="6" fill="currentColor"></circle>
-                                                </svg>
-                                            </span>
-                                            <span className="text-4xl font-medium tracking-tight transition-transform duration-300 group-hover:translate-x-2 md:text-5xl lg:text-6xl">
-                                                {text}
-                                            </span>
                                         </div>
-                                    </Link>
-                                );
-                            })}
-                        </nav>
 
-                        {/* CTA shown inside the drawer only on very small phones */}
-                        <Link
-                            href="/book-meeting"
-                            onClick={handleCloseDrawer}
-                            className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-[#1D4ED8] px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-[#1e40af] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 min-[400px]:hidden"
-                        >
-                            Start a Project
-                        </Link>
-
-                        <div className="mt-auto pt-10">
-                            {/* Divider Line */}
-                            <div className="my-4 border-t border-gray-800"></div>
-
-                            {/* Newsletter & Contact */}
-                            <div className="flex flex-col items-start justify-between gap-8 pb-2 md:flex-row md:gap-10">
-                                {/* Left: Newsletter */}
-                                <div className="w-full md:w-1/2 lg:w-7/12">
-                                    <Typography
-                                        variant="h6"
-                                        sx={{ color: '#fff', mb: 2, fontSize: { xs: '1.05rem', md: '1.3rem' }, fontWeight: 500, lineHeight: 1.35 }}
-                                    >
-                                        Stay Updated with Our Latest News and Offers
-                                    </Typography>
-
-                                    <form onSubmit={handleSubscribe} noValidate>
-                                        <TextField
-                                            type="email"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            placeholder="Enter your email"
-                                            variant="standard"
-                                            size="small"
-                                            fullWidth
-                                            autoComplete="email"
-                                            slotProps={{
-                                                htmlInput: {
-                                                    'aria-label': 'Email address',
-                                                    inputMode: 'email',
-                                                },
-                                            }}
-                                            sx={{
-                                                // 16px prevents iOS Safari from zooming the page on focus
-                                                input: { color: '#fff', fontSize: '16px' },
-                                                mb: 2,
-                                                width: '100%',
-                                                '& .MuiInput-underline:before': {
-                                                    borderBottomColor: '#1D4ED8',
-                                                },
-                                                '& .MuiInput-underline:hover:before': {
-                                                    borderBottomColor: '#1D4ED8',
-                                                },
-                                                '& .MuiInput-underline:after': {
-                                                    borderBottomColor: '#1D4ED8',
-                                                },
-                                            }}
-                                        />
-
-                                        <Stack
-                                            direction="row"
-                                            spacing={0}
-                                            alignItems="center"
-                                            sx={{
-                                                '&:hover .animated-button': {
-                                                    backgroundColor: '#1D4ED8',
-                                                },
-                                                '&:hover .animated-arrow': {
-                                                    transform: 'translateX(5px)',
-                                                },
-                                            }}
-                                        >
-                                            <Button
-                                                type="submit"
-                                                variant="contained"
-                                                disabled={isSubmitting}
-                                                className="animated-button"
-                                                sx={{
-                                                    backgroundColor: '#1D4ED8',
-                                                    color: 'white',
-                                                    padding: '8px 24px',
-                                                    minHeight: '44px',
-                                                    borderRadius: '50px',
-                                                    fontSize: '0.9rem',
-                                                    fontWeight: '500',
-                                                    textTransform: 'none',
-                                                    transition: 'background-color 0.3s ease',
-                                                    '&.Mui-disabled': {
-                                                        color: 'rgba(255,255,255,0.7)',
-                                                        backgroundColor: 'rgba(29, 78, 216, 0.6)',
-                                                    },
-                                                }}
+                                        {/* Right: Contact */}
+                                        <div className="w-full md:w-1/2 md:text-right lg:w-fit">
+                                            <Typography
+                                                variant="h6"
+                                                sx={{ color: '#fff', mb: 1.5, fontSize: { xs: '1.05rem', md: '1.3rem' }, fontWeight: 500 }}
                                             >
-                                                {isSubmitting ? 'Sending…' : 'Subscribe'}
-                                            </Button>
-                                            <Button
-                                                type="submit"
-                                                variant="contained"
-                                                disabled={isSubmitting}
-                                                aria-label="Subscribe"
-                                                className="animated-button animated-arrow"
-                                                sx={{
-                                                    backgroundColor: '#1D4ED8',
-                                                    color: 'white',
-                                                    minWidth: '44px',
-                                                    padding: '0px',
-                                                    height: '44px',
-                                                    borderRadius: '50%',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    transition: 'background-color 0.3s ease, transform 0.3s ease',
-                                                    '&.Mui-disabled': {
-                                                        color: 'rgba(255,255,255,0.7)',
-                                                        backgroundColor: 'rgba(29, 78, 216, 0.6)',
-                                                    },
-                                                }}
+                                                Contact Us
+                                            </Typography>
+                                            <p className="text-sm font-bold text-white md:text-base">YVR - YYC - YYZ</p>
+                                            <a
+                                                href="mailto:contact@digitalspyke.ca"
+                                                className="mt-2 block break-all py-1 text-sm text-gray-300 transition-colors hover:text-[#1D4ED8] md:text-base"
                                             >
-                                                <ArrowForwardIcon sx={{ padding: '0px !important' }} />
-                                            </Button>
-                                        </Stack>
-                                    </form>
-
-                                    {message && (
-                                        <Typography role="status" aria-live="polite" variant="body2" sx={{ color: "#1D4ED8", mt: 1.5 }}>
-                                            {message}
-                                        </Typography>
-                                    )}
-                                </div>
-
-                                {/* Right: Contact */}
-                                <div className="w-full md:w-1/2 md:text-right lg:w-fit">
-                                    <Typography
-                                        variant="h6"
-                                        sx={{ color: '#fff', mb: 1.5, fontSize: { xs: '1.05rem', md: '1.3rem' }, fontWeight: 500 }}
-                                    >
-                                        Contact Us
-                                    </Typography>
-                                    <p className="text-sm font-bold text-white md:text-base">YVR - YYC - YYZ</p>
-                                    <a
-                                        href="mailto:contact@digitalspyke.ca"
-                                        className="mt-2 block break-all py-1 text-sm text-gray-300 transition-colors hover:text-[#1D4ED8] md:text-base"
-                                    >
-                                        contact@digitalspyke.ca
-                                    </a>
-                                    <a
-                                        href="tel:+16479311690"
-                                        className="block py-1 text-sm text-gray-300 transition-colors hover:text-[#1D4ED8] md:text-base"
-                                    >
-                                        +1 (647) 931-1690
-                                    </a>
+                                                contact@digitalspyke.ca
+                                            </a>
+                                            <a
+                                                href="tel:+16479311690"
+                                                className="block py-1 text-sm text-gray-300 transition-colors hover:text-[#1D4ED8] md:text-base"
+                                            >
+                                                +1 (647) 931-1690
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </>
     );
 };

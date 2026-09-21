@@ -21,21 +21,8 @@ function Footer() {
         return null;
     }
 
-    const [glowPosition, setGlowPosition] = useState({ x: "50%", y: "50%" });
-    const [opacity, setOpacity] = useState(0);
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
-
-    const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-        const xPos = `${(e.clientX / window.innerWidth) * 100}%`;
-        const yPos = `${(e.clientY / window.innerHeight) * 100}%`;
-        setGlowPosition({ x: xPos, y: yPos });
-        setOpacity(1);
-    }, []);
-
-    const handleMouseLeave = () => {
-        setOpacity(0);
-    };
 
     const handleSubscribe = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -286,53 +273,7 @@ function Footer() {
                             </div>
                         </div>
 
-                        {/* Glowing Decorative SVG Branding */}
-                        <div
-                            onMouseMove={handleMouseMove}
-                            onMouseLeave={handleMouseLeave}
-                            className="h-[5rem] sm:h-[8rem] md:h-[12rem] lg:h-[15rem] w-full flex items-center justify-center overflow-hidden my-4 sm:my-6"
-                        >
-                            <svg
-                                width="100%"
-                                height="100%"
-                                viewBox="0 0 400 30"
-                                preserveAspectRatio="xMidYMid meet"
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="select-none w-full max-w-full"
-                            >
-                                <defs>
-                                    <radialGradient id="radialGlow" cx={glowPosition.x} cy={glowPosition.y} x1={glowPosition.x} x2={glowPosition.x} y1={glowPosition.y} y2={glowPosition.y} r="35%" gradientUnits="userSpaceOnUse">
-                                        <stop offset="0%" style={{ stopColor: "#ff00ff", stopOpacity: opacity }} />
-                                        <stop offset="50%" style={{ stopColor: "#00ffff", stopOpacity: opacity }} />
-                                        <stop offset="100%" style={{ stopColor: "transparent", stopOpacity: 0 }} />
-                                    </radialGradient>
-                                </defs>
-                                <text
-                                    x="50%"
-                                    y="50%"
-                                    textAnchor="middle"
-                                    dominantBaseline="middle"
-                                    stroke="url(#radialGlow)"
-                                    strokeWidth="0.3"
-                                    className="font-bold fill-transparent text-7xl transition-opacity duration-500 ease-in-out"
-                                    style={{ opacity }}
-                                >
-                                    Digital Spyke
-                                </text>
-                                <text
-                                    x="50%"
-                                    y="50%"
-                                    textAnchor="middle"
-                                    dominantBaseline="middle"
-                                    strokeWidth="0.3"
-                                    className="font-bold fill-transparent text-7xl stroke-neutral-800"
-                                    strokeDashoffset="0"
-                                    strokeDasharray="1000"
-                                >
-                                    Digital Spyke
-                                </text>
-                            </svg>
-                        </div>
+                        {/* Newsletter & Contact Section ends */}
                     </div>
 
                     {/* Bottom Legal & Copyright Bar */}
