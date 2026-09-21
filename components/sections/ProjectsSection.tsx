@@ -176,7 +176,6 @@ const ProjectsSection = () => {
                 overflow: 'hidden',
                 py: 8,
                 px: { xs: 0, md: 12 },
-                bgcolor: 'hsl(220, 65%, 3.52%)',
             }}
             style={{ fontFamily: "'DM Sans', sans-serif" }}
         >

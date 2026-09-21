@@ -12,6 +12,9 @@ import {
   Menu,
   LogOut,
   Sliders,
+  Workflow,
+  Sparkles,
+  Compass,
 } from 'lucide-react';
 import logo from '@/public/logo/logo3.png';
 
@@ -112,7 +115,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <button
               onClick={() => setIsHomeSubmenuOpen(!isHomeSubmenuOpen)}
               className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all ${
-                pathname?.startsWith('/dashboard/hero-banner')
+                pathname?.startsWith('/dashboard/hero-banner') ||
+                pathname?.startsWith('/dashboard/process-steps') ||
+                pathname?.startsWith('/dashboard/what-we-deliver') ||
+                pathname?.startsWith('/dashboard/skillerszone-method')
                   ? 'text-white font-semibold bg-white/10'
                   : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
@@ -143,6 +149,45 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 >
                   <Sliders className="w-3.5 h-3.5" />
                   <span>Hero Banner</span>
+                </Link>
+
+                {/* Process Steps Settings */}
+                <Link
+                  href="/dashboard/process-steps"
+                  className={`flex items-center gap-2 py-1.5 px-3 rounded-lg transition-colors ${
+                    pathname === '/dashboard/process-steps'
+                      ? 'text-blue-400 font-bold bg-blue-500/10'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  <Workflow className="w-3.5 h-3.5" />
+                  <span>Process Steps</span>
+                </Link>
+
+                {/* What We Deliver Settings */}
+                <Link
+                  href="/dashboard/what-we-deliver"
+                  className={`flex items-center gap-2 py-1.5 px-3 rounded-lg transition-colors ${
+                    pathname === '/dashboard/what-we-deliver'
+                      ? 'text-blue-400 font-bold bg-blue-500/10'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>What We Deliver</span>
+                </Link>
+
+                {/* The SkillersZone Method Settings */}
+                <Link
+                  href="/dashboard/skillerszone-method"
+                  className={`flex items-center gap-2 py-1.5 px-3 rounded-lg transition-colors ${
+                    pathname === '/dashboard/skillerszone-method'
+                      ? 'text-blue-400 font-bold bg-blue-500/10'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  <Compass className="w-3.5 h-3.5" />
+                  <span>SkillersZone Method</span>
                 </Link>
               </div>
             )}

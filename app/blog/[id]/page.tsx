@@ -1,7 +1,8 @@
 'use client';
 
 import AnimatedCustomLoader from '@/app/loading';
-import MoreBlog from '@/components/blog/MoreBlog';
+import MoreBlog from '@/components/Blog/MoreBlog';
+import { TracingBeam } from '@/components/ui/tracing-beam';
 import {
     Typography,
     Card,
@@ -86,122 +87,124 @@ const BlogDetails: React.FC = () => {
                             px: { xs: 1, md: 3 },
                         }}
                     >
-                        <Card
-                            sx={{
-                                backgroundColor: 'hsl(220, 65%, 3.52%)',
-                                color: 'white',
-                                p: { xs: 2, md: 4 },
-                                borderRadius: 2,
-                                boxShadow: 3,
-                            }}
-                        >
-                            <Typography
-                                gutterBottom
+                        <TracingBeam className="px-6">
+                            <Card
                                 sx={{
-                                    textTransform: 'uppercase',
-                                    fontSize: '14px',
-                                    fontWeight: 'bold',
-                                    animation: 'shadow-pulse 1.5s infinite',
+                                    backgroundColor: 'transparent',
+                                    color: 'white',
+                                    p: { xs: 2, md: 4 },
+                                    borderRadius: 2,
+                                    boxShadow: 'none',
                                 }}
                             >
-                                <span
-                                    style={{
-                                        background: 'linear-gradient(to right, #00FFAB, #6B46FF)',
-                                        WebkitBackgroundClip: 'text',
-                                        WebkitTextFillColor: 'transparent',
-                                        backgroundClip: 'text',
-                                        color: 'transparent',
-                                        display: 'inline-block',
-                                    }}
-                                >
-                                    Blog
-                                </span>
-                            </Typography>
-
-                            <Typography
-                                variant="caption"
-                                sx={{
-                                    color: 'hsl(220 10% 54.4%)',
-                                    fontSize: '0.8rem',
-                                }}
-                            >
-                                Last Updated: {new Date(blogPost.updatedAt).toLocaleString()}
-                            </Typography>
-
-                            <Typography
-                                variant="h1"
-                                sx={{
-                                    fontWeight: 'bold',
-                                    fontSize: { xs: '2rem', md: '2.5rem' },
-                                    mt: 2,
-                                    mb: 3,
-                                }}
-                            >
-                                {blogPost.title}
-                            </Typography>
-
-                            <CardMedia
-                                component="img"
-                                image={blogPost.imageUrl}
-                                alt={blogPost.title}
-                                sx={{
-                                    height: { xs: 250, md: 450 },
-                                    width: '100%',
-                                    borderRadius: 1,
-                                    objectFit: 'cover',
-                                }}
-                            />
-
-                            <CardContent sx={{ p: 0, my: 3 }}>
                                 <Typography
+                                    gutterBottom
                                     sx={{
-                                        color: 'hsl(220 10% 90%)',
+                                        textTransform: 'uppercase',
+                                        fontSize: '14px',
+                                        fontWeight: 'bold',
+                                        animation: 'shadow-pulse 1.5s infinite',
                                     }}
                                 >
-                                    <Box sx={{
-                                        '& .ql-editor': {
-                                            fontSize: '1rem',
-                                            lineHeight: 1.4,
-                                            color: 'hsl(220 10% 90%)',
-                                            fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-                                            '& h2': {
-                                                fontSize: '2rem',
-                                                fontWeight: 700,
-                                                color: 'hsl(220 10% 90%)',
-                                                letterSpacing: '-0.01em',
-                                            },
-                                            '& h3': {
-                                                fontSize: '1.5rem',
-                                                fontWeight: 700,
-                                                color: 'hsl(220 10% 90%)',
-                                            },
-                                            '& p': {
-                                                color: 'hsl(220 10% 90%)',
-                                            },
-                                            '& iframe': {
-                                                width: '100%',
-                                                minHeight: '400px',
-                                                my: 4,
-                                                border: 'none',
-                                                borderRadius: 2,
-                                            },
-                                            '& blockquote': {
-                                                borderLeft: '4px solid',
-                                                borderColor: 'primary.main',
-                                                fontStyle: 'italic',
-                                                color: 'hsl(220 10% 90%)',
-                                            },
-                                        },
-                                    }}>
-                                        <ReactQuill
-                                            value={blogPost.content}
-                                            readOnly={true}
-                                            theme="bubble"
-                                        />
-                                    </Box>
+                                    <span
+                                        style={{
+                                            background: 'linear-gradient(to right, #00FFAB, #6B46FF)',
+                                            WebkitBackgroundClip: 'text',
+                                            WebkitTextFillColor: 'transparent',
+                                            backgroundClip: 'text',
+                                            color: 'transparent',
+                                            display: 'inline-block',
+                                        }}
+                                    >
+                                        Blog
+                                    </span>
                                 </Typography>
-                            </CardContent>
-                        </Card>
+
+                                <Typography
+                                    variant="caption"
+                                    sx={{
+                                        color: 'hsl(220 10% 54.4%)',
+                                        fontSize: '0.8rem',
+                                    }}
+                                >
+                                    Last Updated: {new Date(blogPost.updatedAt).toLocaleString()}
+                                </Typography>
+
+                                <Typography
+                                    variant="h1"
+                                    sx={{
+                                        fontWeight: 'bold',
+                                        fontSize: { xs: '2rem', md: '2.5rem' },
+                                        mt: 2,
+                                        mb: 3,
+                                    }}
+                                >
+                                    {blogPost.title}
+                                </Typography>
+
+                                <CardMedia
+                                    component="img"
+                                    image={blogPost.imageUrl}
+                                    alt={blogPost.title}
+                                    sx={{
+                                        height: { xs: 250, md: 450 },
+                                        width: '100%',
+                                        borderRadius: 1,
+                                        objectFit: 'cover',
+                                    }}
+                                />
+
+                                <CardContent sx={{ p: 0, my: 3 }}>
+                                    <Typography
+                                        sx={{
+                                            color: 'hsl(220 10% 90%)',
+                                        }}
+                                    >
+                                        <Box sx={{
+                                            '& .ql-editor': {
+                                                fontSize: '1rem',
+                                                lineHeight: 1.4,
+                                                color: 'hsl(220 10% 90%)',
+                                                fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+                                                '& h2': {
+                                                    fontSize: '2rem',
+                                                    fontWeight: 700,
+                                                    color: 'hsl(220 10% 90%)',
+                                                    letterSpacing: '-0.01em',
+                                                },
+                                                '& h3': {
+                                                    fontSize: '1.5rem',
+                                                    fontWeight: 700,
+                                                    color: 'hsl(220 10% 90%)',
+                                                },
+                                                '& p': {
+                                                    color: 'hsl(220 10% 90%)',
+                                                },
+                                                '& iframe': {
+                                                    width: '100%',
+                                                    minHeight: '400px',
+                                                    my: 4,
+                                                    border: 'none',
+                                                    borderRadius: 2,
+                                                },
+                                                '& blockquote': {
+                                                    borderLeft: '4px solid',
+                                                    borderColor: 'primary.main',
+                                                    fontStyle: 'italic',
+                                                    color: 'hsl(220 10% 90%)',
+                                                },
+                                            },
+                                        }}>
+                                            <ReactQuill
+                                                value={blogPost.content}
+                                                readOnly={true}
+                                                theme="bubble"
+                                            />
+                                        </Box>
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </TracingBeam>
                     </Box>
                 </Box>
             </div>
@@ -213,3 +216,4 @@ const BlogDetails: React.FC = () => {
 };
 
 export default BlogDetails;
+

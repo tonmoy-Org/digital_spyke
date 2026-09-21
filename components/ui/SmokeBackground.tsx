@@ -100,8 +100,8 @@ export default function SmokeBackground({
         vec2 mouseDrift = (p - m) * exp(-dMouse * 2.2) * 0.18;
         p += mouseDrift;
 
-        // Elegant slow smoke flow
-        float t = u_time * 0.085;
+        // Faster smoke flow
+        float t = u_time * 0.2;
 
         // Dual domain warping for volumetric smoke billows & fluid tendrils
         vec2 q = vec2(
