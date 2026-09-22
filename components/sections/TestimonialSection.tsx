@@ -1,106 +1,91 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Typography, Box, Container, CardContent, useTheme, useMediaQuery, Avatar } from '@mui/material';
 import Marquee from 'react-fast-marquee';
 import StarIcon from '@mui/icons-material/Star';
 import { motion } from 'framer-motion';
+import {
+  User,
+  UserCheck,
+  Building2,
+  Briefcase,
+  Quote,
+  Star,
+  Award,
+  Crown,
+  Sparkles,
+  Heart,
+  Shield,
+  ThumbsUp,
+  Zap,
+  CheckCircle2,
+  Smile,
+  Compass,
+  Layers,
+} from 'lucide-react';
+import {
+  TestimonialItem,
+  TestimonialsSectionData,
+  DEFAULT_TESTIMONIALS_DATA,
+} from '@/types/testimonials';
+
+const LUCIDE_ICON_MAP: Record<string, React.ElementType> = {
+  User,
+  UserCheck,
+  Building2,
+  Briefcase,
+  Quote,
+  Star,
+  Award,
+  Crown,
+  Sparkles,
+  Heart,
+  Shield,
+  ThumbsUp,
+  Zap,
+  CheckCircle2,
+  Smile,
+  Compass,
+  Layers,
+};
 
 export default function TestimonialSection() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [data, setData] = useState<TestimonialsSectionData>(DEFAULT_TESTIMONIALS_DATA);
 
-  const testimonials = [
-    {
-      company: 'NUTRIMERCHANT',
-      feedback:
-        'Digital Spyke\'s attention to detail and dedication to understanding our business needs helped us reach our target audience effectively. Our website is now fast, functional, and easy to manage!',
-      author: 'Emily J',
-      role: '@Agency Owner',
-      rating: 5,
-    },
-    {
-      company: 'ECOBUILD',
-      feedback:
-        'Partnering with Digital Spyke has been instrumental in scaling our operations. The new website has not only attracted more clients but has improved overall team efficiency and project visibility.',
-      author: 'John D',
-      role: '@Project Manager',
-      rating: 5,
-    },
-    {
-      company: 'LiquidWave',
-      feedback:
-        'Digital Spyke worked wonders for us. They took our ideas, gave them life, and created a website that truly represents our brand\'s values. The professional approach and seamless process were impressive.',
-      author: 'Sarah L',
-      role: '@Founder',
-      rating: 5,
-    },
-    {
-      company: 'GreenFields',
-      feedback:
-        'Choosing Digital Spyke was one of the best decisions we made. They designed a website that fits our eco-conscious brand perfectly, and their customer support is outstanding.',
-      author: 'David T',
-      role: '@Marketing Director',
-      rating: 5,
-    },
-    {
-      company: 'UrbanTech Solutions',
-      feedback:
-        'Digital Spyke brought our vision to life with their cutting-edge design and understanding of tech solutions. We now have a site that stands out in our industry.',
-      author: 'Lisa M',
-      role: '@CEO',
-      rating: 5,
-    },
-  ];
+  useEffect(() => {
+    // 1. Instant local storage cache check for zero-latency paint
+    try {
+      const cached = localStorage.getItem('digital_spyke_testimonials');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (parsed && Array.isArray(parsed.testimonials) && parsed.testimonials.length > 0) {
+          setData(parsed);
+        }
+      }
+    } catch (e) {}
 
-  const testimonials2 = [
-    {
-      company: 'FreshWave Foods',
-      feedback:
-        'Digital Spyke understood our brand and created a seamless online ordering experience, boosting customer engagement significantly.',
-      author: 'Michael S',
-      role: '@Brand Manager',
-      rating: 5,
-    },
-    {
-      company: 'Bright Futures Education',
-      feedback:
-        'Digital Spyke transformed our complex needs into a streamlined, user-friendly website, making the whole process smooth and enjoyable.',
-      author: 'Sophia R',
-      role: '@Program Director',
-      rating: 5,
-    },
-    {
-      company: 'HealthFirst Clinic',
-      feedback:
-        'Digital Spyke delivered a secure, reliable healthcare platform that meets compliance standards and enhances patient trust.',
-      author: 'Dr. Liam W',
-      role: '@Clinic Head',
-      rating: 5,
-    },
-    {
-      company: 'EcoScape Landscapes',
-      feedback:
-        'Digital Spyke provided a beautifully designed website that perfectly showcases our landscape services, exceeding expectations.',
-      author: 'Olivia H',
-      role: '@Co-Founder',
-      rating: 5,
-    },
-    {
-      company: 'Peak Performance Fitness',
-      feedback:
-        'Digital Spyke built a modern, user-friendly website that integrates seamlessly with our scheduling tools, bringing in more clients.',
-      author: 'Jake B',
-      role: '@Operations Manager',
-      rating: 5,
-    },
-  ];
+    // 2. Fetch fresh data from API
+    async function fetchTestimonials() {
+      try {
+        const res = await fetch('/api/testimonials', { cache: 'no-store' });
+        const json = await res.json();
+        if (json.success && json.data) {
+          setData(json.data);
+          try {
+            localStorage.setItem('digital_spyke_testimonials', JSON.stringify(json.data));
+          } catch (e) {}
+        }
+      } catch (err) {
+        console.error('Failed to load testimonials:', err);
+      }
+    }
+    fetchTestimonials();
+  }, []);
 
-  interface RenderStarsProps {
-    rating: number;
-  }
-
-  const renderStars = (rating: RenderStarsProps['rating']): JSX.Element[] => {
+  const renderStars = (rating: number): JSX.Element[] => {
     return Array.from({ length: 5 }, (_, index) => (
       <StarIcon
         key={index}
@@ -129,6 +114,61 @@ export default function TestimonialSection() {
     position: 'relative',
   };
 
+  const row1Testimonials = data.testimonials.filter((t) => t.row === 'row1');
+  const row2Testimonials = data.testimonials.filter((t) => t.row === 'row2');
+
+  // Fallback in case one of the rows is empty
+  const activeRow1 = row1Testimonials.length > 0 ? row1Testimonials : data.testimonials.slice(0, 5);
+  const activeRow2 = row2Testimonials.length > 0 ? row2Testimonials : data.testimonials.slice(5);
+
+  const renderAvatar = (testimonial: TestimonialItem) => {
+    if (testimonial.avatarType === 'image' && testimonial.avatarImage) {
+      return (
+        <Avatar
+          src={testimonial.avatarImage}
+          alt={testimonial.author}
+          sx={{
+            width: 42,
+            height: 42,
+            border: '1px solid rgba(255,255,255,0.2)',
+          }}
+        />
+      );
+    }
+
+    if (testimonial.avatarType === 'icon' && testimonial.avatarIcon) {
+      const IconComponent = LUCIDE_ICON_MAP[testimonial.avatarIcon] || User;
+      return (
+        <Avatar
+          sx={{
+            width: 42,
+            height: 42,
+            bgcolor: testimonial.avatarBgColor || 'rgba(107, 70, 255, 0.2)',
+            border: '1px solid rgba(255,255,255,0.2)',
+          }}
+        >
+          <IconComponent style={{ width: 22, height: 22, color: '#ffffff' }} />
+        </Avatar>
+      );
+    }
+
+    // Default Initials Avatar
+    return (
+      <Avatar
+        sx={{
+          width: 42,
+          height: 42,
+          bgcolor: testimonial.avatarBgColor || 'rgba(107, 70, 255, 0.2)',
+          color: '#ffffff',
+          fontWeight: 600,
+          border: '1px solid rgba(255,255,255,0.15)',
+        }}
+      >
+        {testimonial.author ? testimonial.author.charAt(0) : 'A'}
+      </Avatar>
+    );
+  };
+
   return (
     <Box
       sx={{
@@ -147,52 +187,112 @@ export default function TestimonialSection() {
           viewport={{ once: true, amount: 0.4 }}
         >
           <Box sx={{ maxWidth: '3xl', mx: 'auto', textAlign: 'center', mb: 5 }}>
-            <Typography
-              sx={{
-                fontSize: { xs: '1.8rem', lg: '40px' },
-                fontWeight: 500,
-                color: 'white',
-                mt: 0,
-                mb: 0,
-                lineHeight: '1.15em',
-                letterSpacing: '-0.03em',
-              }}
-            >
-              Making{' '}
-              <span style={{
-                background: 'linear-gradient(to right, #00FFAB, #6B46FF)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                color: 'transparent',
-                display: 'inline-block',
-              }}>hundreds of businesses</span> better, big or small.
-            </Typography>
-            <Typography
-              sx={{
-                color: 'rgba(255,255,255,0.7)',
-                mt: 2,
-                fontSize: '1rem',
-              }}
-            >
-              Don't just take our word for it - hear from our satisfied clients.
-            </Typography>
+            {data.badgeText && (
+              <Box sx={{ mb: 1.5 }}>
+                <span
+                  style={{
+                    fontSize: data.badgeFontSize || '0.75rem',
+                    fontWeight: 700,
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    color: '#00FFAB',
+                    background: 'rgba(0, 255, 171, 0.1)',
+                    padding: '4px 12px',
+                    borderRadius: '9999px',
+                    display: 'inline-block',
+                  }}
+                >
+                  {data.badgeText}
+                </span>
+              </Box>
+            )}
+
+            {data.headingHtml ? (
+              <Typography
+                component="div"
+                sx={{
+                  fontSize: { xs: '1.8rem', lg: data.headingFontSize || '40px' },
+                  fontWeight: 500,
+                  color: 'white',
+                  mt: 0,
+                  mb: 0,
+                  lineHeight: '1.15em',
+                  letterSpacing: '-0.03em',
+                  '& p': { m: 0, display: 'inline' },
+                }}
+                dangerouslySetInnerHTML={{ __html: data.headingHtml }}
+              />
+            ) : (
+              <Typography
+                sx={{
+                  fontSize: { xs: '1.8rem', lg: data.headingFontSize || '40px' },
+                  fontWeight: 500,
+                  color: 'white',
+                  mt: 0,
+                  mb: 0,
+                  lineHeight: '1.15em',
+                  letterSpacing: '-0.03em',
+                }}
+              >
+                {data.headingPrefix}
+                <span
+                  style={{
+                    background: 'linear-gradient(to right, #00FFAB, #6B46FF)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                    color: 'transparent',
+                    display: 'inline-block',
+                  }}
+                >
+                  {data.headingHighlight}
+                </span>
+                {data.headingSuffix}
+              </Typography>
+            )}
+
+            {data.descriptionHtml ? (
+              <Typography
+                component="div"
+                sx={{
+                  color: 'rgba(255,255,255,0.7)',
+                  mt: 2,
+                  fontSize: data.descriptionFontSize || '1rem',
+                  '& p': { m: 0 },
+                }}
+                dangerouslySetInnerHTML={{ __html: data.descriptionHtml }}
+              />
+            ) : (
+              <Typography
+                sx={{
+                  color: 'rgba(255,255,255,0.7)',
+                  mt: 2,
+                  fontSize: data.descriptionFontSize || '1rem',
+                }}
+              >
+                {data.description}
+              </Typography>
+            )}
           </Box>
         </motion.div>
+
+        {/* Top Marquee (Row 1 - Scrolling Left) */}
         <Box sx={{ mb: 0 }}>
           <Marquee
             gradient={true}
-            speed={30}
+            speed={data.row1Speed || 30}
+            pauseOnHover={data.pauseOnHover !== false}
             gradientColor="hsl(220, 65%, 3.52%)"
             gradientWidth={isMobile ? 50 : 200}
             style={{ width: '100%' }}
           >
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} sx={cardStyles}>
+            {activeRow1.map((testimonial, index) => (
+              <Card key={testimonial.id || index} sx={cardStyles}>
                 <Box
                   sx={{
                     height: '1px',
-                    background: 'linear-gradient(90deg, rgba(0, 85, 255, 0) 0%, rgb(0, 85, 255) 50%, rgba(0, 85, 255, 0) 100%)',
+                    background:
+                      'linear-gradient(90deg, rgba(0, 85, 255, 0) 0%, rgb(0, 85, 255) 50%, rgba(0, 85, 255, 0) 100%)',
                     position: 'absolute',
                     top: '0px',
                     left: '10%',
@@ -201,69 +301,88 @@ export default function TestimonialSection() {
                 />
                 <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, p: 1 }}>
                   <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5 }}>
-                    <Avatar
-                      sx={{
-                        width: 42,
-                        height: 42,
-                        bgcolor: 'rgba(107, 70, 255, 0.2)',
-                      }}
-                    >
-                      {testimonial.author.charAt(0)}
-                    </Avatar>
+                    {renderAvatar(testimonial)}
                     <Box sx={{ flex: 1 }}>
-                      <Typography variant="subtitle2" sx={{ fontWeight: '500', color: 'white' }}>
-                        {testimonial.author}
-                      </Typography>
-                      <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)', display: 'block' }}>
-                        {testimonial.role}
-                      </Typography>
+                      <Typography
+                        component="div"
+                        variant="subtitle2"
+                        sx={{
+                          fontWeight: '500',
+                          color: 'white',
+                          fontSize: testimonial.authorFontSize || undefined,
+                          '& p': { m: 0, display: 'inline' },
+                        }}
+                        dangerouslySetInnerHTML={{ __html: testimonial.author }}
+                      />
+                      <Typography
+                        component="div"
+                        variant="caption"
+                        sx={{
+                          color: 'rgba(255,255,255,0.7)',
+                          display: 'block',
+                          fontSize: testimonial.roleFontSize || undefined,
+                          '& p': { m: 0, display: 'inline' },
+                        }}
+                        dangerouslySetInnerHTML={{ __html: testimonial.role }}
+                      />
                       <Box sx={{ display: 'flex', mt: 0.5 }}>{renderStars(testimonial.rating)}</Box>
                     </Box>
                   </Box>
+
                   <Box sx={{ mt: 1.5 }}>
                     <Typography
+                      component="div"
                       variant="caption"
                       sx={{
                         color: 'rgba(255,255,255,0.9)',
                         fontStyle: 'italic',
-                        fontSize: '0.75rem',
+                        fontSize: testimonial.companyFontSize || '0.75rem',
+                        '& p': { m: 0, display: 'inline' },
                       }}
-                    >
-                      "{testimonial.company}"
-                    </Typography>
+                      dangerouslySetInnerHTML={{
+                        __html: testimonial.company?.startsWith('"')
+                          ? testimonial.company
+                          : `"${testimonial.company}"`,
+                      }}
+                    />
                   </Box>
+
                   <Typography
+                    component="div"
                     variant="body2"
                     sx={{
                       mt: 2,
                       color: 'rgba(255,255,255,0.85)',
-                      fontSize: isMobile ? '0.8rem' : '0.9rem',
+                      fontSize: testimonial.feedbackFontSize || (isMobile ? '0.8rem' : '0.9rem'),
                       lineHeight: 1.6,
+                      '& p': { m: 0 },
                     }}
-                  >
-                    {testimonial.feedback}
-                  </Typography>
+                    dangerouslySetInnerHTML={{ __html: testimonial.feedback }}
+                  />
                 </CardContent>
               </Card>
             ))}
           </Marquee>
         </Box>
 
+        {/* Bottom Marquee (Row 2 - Scrolling Right) */}
         <Box>
           <Marquee
             direction="right"
             gradient={true}
-            speed={30}
+            speed={data.row2Speed || 30}
+            pauseOnHover={data.pauseOnHover !== false}
             gradientColor="hsl(220, 65%, 3.52%)"
             gradientWidth={isMobile ? 50 : 200}
             style={{ width: '100%' }}
           >
-            {testimonials2.map((testimonial, index) => (
-              <Card key={index} sx={cardStyles}>
+            {activeRow2.map((testimonial, index) => (
+              <Card key={testimonial.id || index} sx={cardStyles}>
                 <Box
                   sx={{
                     height: '0.5px',
-                    background: 'linear-gradient(90deg, rgba(0, 85, 255, 0) 0%, rgb(0, 85, 255) 50%, rgba(0, 85, 255, 0) 100%)',
+                    background:
+                      'linear-gradient(90deg, rgba(0, 85, 255, 0) 0%, rgb(0, 85, 255) 50%, rgba(0, 85, 255, 0) 100%)',
                     position: 'absolute',
                     top: '0px',
                     left: '10%',
@@ -272,48 +391,64 @@ export default function TestimonialSection() {
                 />
                 <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, p: 1 }}>
                   <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5 }}>
-                    <Avatar
-                      sx={{
-                        width: 42,
-                        height: 42,
-                        bgcolor: 'rgba(107, 70, 255, 0.2)',
-                      }}
-                    >
-                      {testimonial.author.charAt(0)}
-                    </Avatar>
+                    {renderAvatar(testimonial)}
                     <Box sx={{ flex: 1 }}>
-                      <Typography variant="subtitle2" sx={{ fontWeight: '500', color: 'white' }}>
-                        {testimonial.author}
-                      </Typography>
-                      <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)', display: 'block' }}>
-                        {testimonial.role}
-                      </Typography>
+                      <Typography
+                        component="div"
+                        variant="subtitle2"
+                        sx={{
+                          fontWeight: '500',
+                          color: 'white',
+                          fontSize: testimonial.authorFontSize || undefined,
+                          '& p': { m: 0, display: 'inline' },
+                        }}
+                        dangerouslySetInnerHTML={{ __html: testimonial.author }}
+                      />
+                      <Typography
+                        component="div"
+                        variant="caption"
+                        sx={{
+                          color: 'rgba(255,255,255,0.7)',
+                          display: 'block',
+                          fontSize: testimonial.roleFontSize || undefined,
+                          '& p': { m: 0, display: 'inline' },
+                        }}
+                        dangerouslySetInnerHTML={{ __html: testimonial.role }}
+                      />
                       <Box sx={{ display: 'flex', mt: 0.5 }}>{renderStars(testimonial.rating)}</Box>
                     </Box>
                   </Box>
-                  <Box>
+
+                  <Box sx={{ mt: 1.5 }}>
                     <Typography
+                      component="div"
                       variant="caption"
                       sx={{
                         color: 'rgba(255,255,255,0.9)',
                         fontStyle: 'italic',
-                        fontSize: '0.75rem',
+                        fontSize: testimonial.companyFontSize || '0.75rem',
+                        '& p': { m: 0, display: 'inline' },
                       }}
-                    >
-                      "{testimonial.company}"
-                    </Typography>
+                      dangerouslySetInnerHTML={{
+                        __html: testimonial.company?.startsWith('"')
+                          ? testimonial.company
+                          : `"${testimonial.company}"`,
+                      }}
+                    />
                   </Box>
+
                   <Typography
+                    component="div"
                     variant="body2"
                     sx={{
                       mt: 2,
                       color: 'rgba(255,255,255,0.85)',
-                      fontSize: isMobile ? '0.8rem' : '0.9rem',
+                      fontSize: testimonial.feedbackFontSize || (isMobile ? '0.8rem' : '0.9rem'),
                       lineHeight: 1.6,
+                      '& p': { m: 0 },
                     }}
-                  >
-                    {testimonial.feedback}
-                  </Typography>
+                    dangerouslySetInnerHTML={{ __html: testimonial.feedback }}
+                  />
                 </CardContent>
               </Card>
             ))}

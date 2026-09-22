@@ -17,6 +17,8 @@ import {
   Compass,
   Building2,
   FolderKanban,
+  MessageSquareQuote,
+  Briefcase,
 } from 'lucide-react';
 import logo from '@/public/logo/logo3.png';
 
@@ -122,7 +124,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 pathname?.startsWith('/dashboard/process-steps') ||
                 pathname?.startsWith('/dashboard/what-we-deliver') ||
                 pathname?.startsWith('/dashboard/projects-industries') ||
-                pathname?.startsWith('/dashboard/skillerszone-method')
+                pathname?.startsWith('/dashboard/skillerszone-method') ||
+                pathname?.startsWith('/dashboard/testimonials') ||
+                pathname?.startsWith('/dashboard/portfolio-showcase')
                   ? 'text-white font-semibold bg-white/10'
                   : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
@@ -218,6 +222,32 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 >
                   <Compass className="w-3.5 h-3.5" />
                   <span>SkillersZone Method</span>
+                </Link>
+
+                {/* Testimonials Settings */}
+                <Link
+                  href="/dashboard/testimonials"
+                  className={`flex items-center gap-2 py-1.5 px-3 rounded-lg transition-colors ${
+                    pathname === '/dashboard/testimonials'
+                      ? 'text-blue-400 font-bold bg-blue-500/10'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  <MessageSquareQuote className="w-3.5 h-3.5" />
+                  <span>Testimonials</span>
+                </Link>
+
+                {/* Portfolio Showcase Settings */}
+                <Link
+                  href="/dashboard/portfolio-showcase"
+                  className={`flex items-center gap-2 py-1.5 px-3 rounded-lg transition-colors ${
+                    pathname === '/dashboard/portfolio-showcase'
+                      ? 'text-blue-400 font-bold bg-blue-500/10'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  <Briefcase className="w-3.5 h-3.5" />
+                  <span>Portfolio Showcase</span>
                 </Link>
               </div>
             )}

@@ -12,7 +12,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 export interface HeroParallaxProduct {
+  id?: string;
   title: string;
+  titleFontSize?: string;
   link: string;
   thumbnail: string;
 }
@@ -24,9 +26,11 @@ export const HeroParallax = ({
   products: HeroParallaxProduct[];
   header?: React.ReactNode;
 }) => {
-  const firstRow = products.slice(0, 5);
-  const secondRow = products.slice(5, 10);
-  const thirdRow = products.slice(10, 15);
+  const count = products.length;
+  const perRow = Math.max(1, Math.ceil(count / 3));
+  const firstRow = products.slice(0, perRow);
+  const secondRow = products.slice(perRow, perRow * 2);
+  const thirdRow = products.slice(perRow * 2);
   const ref = React.useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -75,29 +79,29 @@ export const HeroParallax = ({
         }}
       >
         <motion.div className="flex flex-row-reverse space-x-reverse space-x-4 sm:space-x-12 md:space-x-20 mb-8 sm:mb-16 md:mb-20">
-          {firstRow.map((product) => (
+          {firstRow.map((product, idx) => (
             <ProductCard
               product={product}
               translate={translateX}
-              key={product.title}
+              key={product.id || `row1-${product.title}-${idx}`}
             />
           ))}
         </motion.div>
         <motion.div className="flex flex-row mb-8 sm:mb-16 md:mb-20 space-x-4 sm:space-x-12 md:space-x-20">
-          {secondRow.map((product) => (
+          {secondRow.map((product, idx) => (
             <ProductCard
               product={product}
               translate={translateXReverse}
-              key={product.title}
+              key={product.id || `row2-${product.title}-${idx}`}
             />
           ))}
         </motion.div>
         <motion.div className="flex flex-row-reverse space-x-reverse space-x-4 sm:space-x-12 md:space-x-20">
-          {thirdRow.map((product) => (
+          {thirdRow.map((product, idx) => (
             <ProductCard
               product={product}
               translate={translateX}
-              key={product.title}
+              key={product.id || `row3-${product.title}-${idx}`}
             />
           ))}
         </motion.div>
@@ -135,6 +139,8 @@ export const ProductCard = ({
   product: HeroParallaxProduct;
   translate: MotionValue<number>;
 }) => {
+  const plainTitle = (product.title || '').replace(/<[^>]*>/g, '').trim() || 'Product';
+
   return (
     <motion.div
       style={{
@@ -143,28 +149,30 @@ export const ProductCard = ({
       whileHover={{
         y: -20,
       }}
-      key={product.title}
+      key={product.id || product.title}
       className="group/product h-56 sm:h-80 md:h-96 w-[16rem] sm:w-[24rem] md:w-[30rem] relative shrink-0 rounded-2xl overflow-hidden border border-white/10"
     >
       <Link
-        href={product.link}
+        href={product.link || '#'}
         target="_blank"
         rel="noopener noreferrer"
         className="block h-full w-full"
       >
         <Image
-          src={product.thumbnail}
+          src={product.thumbnail || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop'}
           height={600}
           width={600}
           className="object-cover object-left-top absolute h-full w-full inset-0 transition-transform duration-500 group-hover/product:scale-105"
-          alt={product.title}
+          alt={plainTitle}
         />
       </Link>
       <div className="absolute inset-0 h-full w-full opacity-0 group-hover/product:opacity-80 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none transition-opacity duration-300" />
       <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover/product:opacity-100 transition-opacity duration-300 pointer-events-none flex items-center justify-between">
-        <h3 className="text-white text-base sm:text-xl font-bold tracking-tight drop-shadow-md">
-          {product.title}
-        </h3>
+        <h3
+          className="text-white text-base sm:text-xl font-bold tracking-tight drop-shadow-md"
+          style={product.titleFontSize ? { fontSize: product.titleFontSize } : undefined}
+          dangerouslySetInnerHTML={{ __html: product.title || 'Product' }}
+        />
         <span className="text-xs text-cyan-400 font-medium px-2.5 py-1 rounded-full bg-black/70 border border-cyan-500/40 backdrop-blur-sm">
           Visit &rarr;
         </span>
