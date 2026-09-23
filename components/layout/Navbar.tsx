@@ -11,15 +11,20 @@ import { TextField, Button, Typography } from '@mui/material';
 
 import { cn } from "@/lib/utils";
 
+interface NavbarProps {
+    enabled?: boolean;
+}
+
 const NAV_LINKS = [
     { text: "Home", href: "/" },
+    { text: "Services", href: "/services" },
     { text: "About Us", href: "/about" },
     { text: "Blogs", href: "/blog" },
     { text: "Contact", href: "/contact" },
     { text: "Dashboard", href: "/dashboard" },
 ];
 
-const Navbar = () => {
+const Navbar = ({ enabled = true }: NavbarProps) => {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const [email, setEmail] = useState('');
@@ -30,13 +35,25 @@ const Navbar = () => {
     const handleCloseDrawer = useCallback(() => setDrawerOpen(false), []);
     const toggleDrawer = useCallback(() => setDrawerOpen((prev) => !prev), []);
 
-    // Optimized scroll tracking using requestAnimationFrame to prevent re-render lag
+    // Lock body scroll when mobile drawer is open
+    useEffect(() => {
+        if (drawerOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [drawerOpen]);
+
+    // Optimized scroll tracking: sticky backdrop-filter blur when scroll offset > 50px
     useEffect(() => {
         let ticking = false;
         const handleScroll = () => {
             if (!ticking) {
                 window.requestAnimationFrame(() => {
-                    const scrolled = window.scrollY > 20;
+                    const scrolled = window.scrollY > 50;
                     setIsScrolled((prev) => (prev !== scrolled ? scrolled : prev));
                     ticking = false;
                 });
@@ -63,8 +80,8 @@ const Navbar = () => {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [drawerOpen]);
 
-    // Do not render frontend Navbar on Dashboard or Login pages (After hooks to comply with React rules)
-    if (pathname?.startsWith('/dashboard') || pathname?.startsWith('/login')) {
+    // Do not render frontend Navbar if disabled or on Dashboard/Login pages (After hooks to comply with React rules)
+    if (!enabled || pathname?.startsWith('/dashboard') || pathname?.startsWith('/login')) {
         return null;
     }
 
@@ -110,10 +127,10 @@ const Navbar = () => {
             <nav
                 aria-label="Main navigation"
                 className={cn(
-                    "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out px-4 sm:px-6 md:px-10 bg-transparent",
+                    "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out px-4 sm:px-6 md:px-10",
                     isScrolled && !drawerOpen
-                        ? "py-2 sm:py-2.5"
-                        : "py-3 sm:py-3.5"
+                        ? "bg-transparent py-2 sm:py-2.5"
+                        : "bg-transparent py-3 sm:py-3.5"
                 )}
             >
                 <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-3">
@@ -133,6 +150,7 @@ const Navbar = () => {
 
                     {/* Actions */}
                     <div className="flex items-center gap-2 sm:gap-3">
+
                         {/* CTA: hidden on very small phones (repeated inside drawer) */}
                         <Link
                             href="/book-meeting"

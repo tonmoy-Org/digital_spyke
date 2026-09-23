@@ -162,6 +162,7 @@ export const ProductCard = ({
           src={product.thumbnail || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop'}
           height={600}
           width={600}
+          unoptimized
           className="object-cover object-left-top absolute h-full w-full inset-0 transition-transform duration-500 group-hover/product:scale-105"
           alt={plainTitle}
         />

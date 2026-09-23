@@ -277,4 +277,33 @@ body::-webkit-scrollbar,
   font-size: 2.5em !important;
 }
 
+/* FAQ Dashboard Quill Customization */
+.faq-quill .ql-toolbar {
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+  border-color: #e5e7eb !important;
+  background-color: #f9fafb;
+}
+.faq-quill .ql-container {
+  border-bottom-left-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
+  border-color: #e5e7eb !important;
+  min-height: 80px;
+  font-size: 0.875rem;
+}
+
+.faq-quill-modal .ql-toolbar {
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+  border-color: #e5e7eb !important;
+  background-color: #f9fafb;
+}
+.faq-quill-modal .ql-container {
+  border-bottom-left-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
+  border-color: #e5e7eb !important;
+  min-height: 120px;
+  font-size: 0.875rem;
+}
+
 

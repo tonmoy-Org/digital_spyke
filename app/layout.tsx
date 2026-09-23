@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${roboto.className} overflow-x-hidden w-full`}>
+      <body className={`${roboto.className} overflow-x-clip w-full`}>
         <Navbar />
         <div className="min-h-screen">
           {children}

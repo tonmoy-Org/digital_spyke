@@ -2,9 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  experimental: {
-    webpackBuildWorker: false,
-  },
   images: {
     domains: [
       'cdn.prod.website-files.com',
