@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -20,17 +20,48 @@ import {
   MessageSquareQuote,
   Briefcase,
   HelpCircle,
+  Layers,
+  Plus,
 } from 'lucide-react';
 import logo from '@/public/logo/logo3.png';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [user, setUser] = useState<{ id: string; name: string; email: string; role: string } | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isHomeSubmenuOpen, setIsHomeSubmenuOpen] = useState(true);
+  const [isServicesSubmenuOpen, setIsServicesSubmenuOpen] = useState(true);
+  const [availableServices, setAvailableServices] = useState<{ id: string; navTitle: string; slug: string; isPrimary?: boolean }[]>([]);
+
+  // Load available services for sidebar navigation
+  const loadSidebarServices = useCallback(async () => {
+    try {
+      const res = await fetch('/api/services');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && Array.isArray(data.services) && data.services.length > 0) {
+          setAvailableServices(
+            data.services.map((s: any) => ({
+              id: s.id,
+              navTitle: s.navTitle,
+              slug: s.slug,
+              isPrimary: s.isPrimary,
+            }))
+          );
+        }
+      }
+    } catch (err) {
+      // ignore
+    }
+  }, []);
+
+  useEffect(() => {
+    loadSidebarServices();
+  }, [loadSidebarServices, pathname]);
 
   // Check Authentication
   const checkAuth = useCallback(async () => {
@@ -263,6 +294,71 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 >
                   <HelpCircle className="w-3.5 h-3.5" />
                   <span>FAQ Section</span>
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* Services Main Point & Subpoints */}
+          <div>
+            <button
+              onClick={() => setIsServicesSubmenuOpen(!isServicesSubmenuOpen)}
+              className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all ${
+                pathname?.startsWith('/dashboard/services')
+                  ? 'text-white font-semibold bg-white/10'
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <div className="flex items-center gap-3.5">
+                <Briefcase className="w-5 h-5 shrink-0 text-cyan-400" />
+                {isSidebarOpen && <span>Services</span>}
+              </div>
+              {isSidebarOpen && (
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform ${
+                    isServicesSubmenuOpen ? 'rotate-180' : ''
+                  }`}
+                />
+              )}
+            </button>
+
+            {isSidebarOpen && isServicesSubmenuOpen && (
+              <div className="pl-12 pr-4 py-2 space-y-1.5 text-xs">
+                {/* Available services listed directly by name */}
+                {availableServices.map((srv) => {
+                  const currentQueryId = searchParams?.get('id');
+                  const isSelected =
+                    pathname === '/dashboard/services' &&
+                    (currentQueryId === srv.id || (!currentQueryId && srv.isPrimary));
+
+                  return (
+                    <Link
+                      key={srv.id}
+                      href={`/dashboard/services?id=${srv.id}`}
+                      className={`flex items-center gap-2 py-1.5 px-3 rounded-lg transition-colors truncate ${
+                        isSelected
+                          ? 'text-blue-400 font-bold bg-blue-500/10'
+                          : 'text-gray-400 hover:text-white'
+                      }`}
+                      title={srv.navTitle}
+                    >
+                      <Layers className="w-3.5 h-3.5 shrink-0" />
+                      <span className="truncate">{srv.navTitle}</span>
+                    </Link>
+                  );
+                })}
+
+                {/* Add Service Subpoint */}
+                <Link
+                  href="/dashboard/services/add"
+                  className={`flex items-center gap-2 py-1.5 px-3 rounded-lg transition-colors ${
+                    pathname === '/dashboard/services/add'
+                      ? 'text-blue-400 font-bold bg-blue-500/10'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  <Plus className="w-3.5 h-3.5 shrink-0" />
+                  <span>Add Services</span>
                 </Link>
               </div>
             )}

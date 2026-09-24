@@ -15,9 +15,15 @@ interface NavbarProps {
     enabled?: boolean;
 }
 
-const NAV_LINKS = [
+const NAV_LINKS: { text: string; href: string; subLinks?: { text: string; href: string }[] }[] = [
     { text: "Home", href: "/" },
-    { text: "Services", href: "/services" },
+    { 
+        text: "Services", 
+        href: "/services",
+        subLinks: [
+            { text: "Web Development Services", href: "/services" },
+        ]
+    },
     { text: "About Us", href: "/about" },
     { text: "Blogs", href: "/blog" },
     { text: "Contact", href: "/contact" },
@@ -30,7 +36,31 @@ const Navbar = ({ enabled = true }: NavbarProps) => {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [servicesSubLinks, setServicesSubLinks] = useState<{ text: string; href: string }[]>([
+        { text: "Web Development Services", href: "/services" },
+    ]);
     const pathname = usePathname();
+
+    // Fetch dynamic services list for sub-links
+    useEffect(() => {
+        async function loadNavServices() {
+            try {
+                const res = await fetch('/api/services?nav=true');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.success && Array.isArray(data.navLinks) && data.navLinks.length > 0) {
+                        setServicesSubLinks(data.navLinks.map((item: any) => ({
+                            text: item.text,
+                            href: item.href,
+                        })));
+                    }
+                }
+            } catch {
+                // Fallback to default
+            }
+        }
+        loadNavServices();
+    }, [pathname]);
 
     const handleCloseDrawer = useCallback(() => setDrawerOpen(false), []);
     const toggleDrawer = useCallback(() => setDrawerOpen((prev) => !prev), []);
@@ -263,8 +293,9 @@ const Navbar = ({ enabled = true }: NavbarProps) => {
                             <div className="mx-auto flex min-h-full w-full max-w-[1600px] flex-col px-6 pb-[max(2rem,env(safe-area-inset-bottom))] pt-20 sm:px-10 md:px-12 lg:px-20">
                                 {/* Navigation Links with Smooth Staggered Animation */}
                                 <nav aria-label="Site menu" className="flex flex-col space-y-1 md:space-y-2">
-                                    {NAV_LINKS.map(({ text, href }, index) => {
-                                        const isActive = pathname === href;
+                                    {NAV_LINKS.map(({ text, href, subLinks }, index) => {
+                                        const effectiveSubLinks = text === "Services" ? servicesSubLinks : subLinks;
+                                        const isActive = pathname === href || (effectiveSubLinks && effectiveSubLinks.some(s => pathname === s.href));
 
                                         return (
                                             <motion.div
@@ -277,35 +308,53 @@ const Navbar = ({ enabled = true }: NavbarProps) => {
                                                     ease: "easeOut",
                                                 }}
                                             >
-                                                <Link
-                                                    href={href}
-                                                    onClick={handleCloseDrawer}
-                                                    aria-current={isActive ? "page" : undefined}
-                                                    className="group rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1D4ED8]"
-                                                >
-                                                    <div
-                                                        className={cn(
-                                                            "flex cursor-pointer items-center justify-start gap-3 py-2 sm:py-2.5 transition-all duration-300",
-                                                            isActive
-                                                                ? "font-bold text-[#1D4ED8]"
-                                                                : "text-white hover:text-[#1D4ED8] active:text-[#1D4ED8]"
-                                                        )}
+                                                <div className="group flex flex-col">
+                                                    <Link
+                                                        href={href}
+                                                        onClick={handleCloseDrawer}
+                                                        aria-current={isActive ? "page" : undefined}
+                                                        className="rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1D4ED8]"
                                                     >
-                                                        <span
+                                                        <div
                                                             className={cn(
-                                                                "transition-opacity duration-300",
-                                                                isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                                                                "flex cursor-pointer items-center justify-start gap-3 py-2 sm:py-2.5 transition-all duration-300",
+                                                                isActive
+                                                                    ? "font-bold text-[#1D4ED8]"
+                                                                    : "text-white hover:text-[#1D4ED8] active:text-[#1D4ED8]"
                                                             )}
                                                         >
-                                                            <svg className="h-2.5 w-2.5 text-[#1D4ED8] md:h-3 md:w-3" viewBox="0 0 12 12" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                                                <circle cx="6" cy="6" r="6" fill="currentColor"></circle>
-                                                            </svg>
-                                                        </span>
-                                                        <span className="text-3xl font-medium tracking-tight transition-transform duration-300 group-hover:translate-x-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:text-4xl md:text-5xl lg:text-6xl">
-                                                            {text}
-                                                        </span>
-                                                    </div>
-                                                </Link>
+                                                            <span
+                                                                className={cn(
+                                                                    "transition-opacity duration-300",
+                                                                    isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                                                                )}
+                                                            >
+                                                                <svg className="h-2.5 w-2.5 text-[#1D4ED8] md:h-3 md:w-3" viewBox="0 0 12 12" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                                                    <circle cx="6" cy="6" r="6" fill="currentColor"></circle>
+                                                                </svg>
+                                                            </span>
+                                                            <span className="text-3xl font-medium tracking-tight transition-transform duration-300 group-hover:translate-x-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:text-4xl md:text-5xl lg:text-6xl">
+                                                                {text}
+                                                            </span>
+                                                        </div>
+                                                    </Link>
+
+                                                    {effectiveSubLinks && effectiveSubLinks.length > 0 && (
+                                                        <div className="overflow-hidden transition-all duration-500 max-h-0 opacity-0 group-hover:max-h-[500px] group-hover:opacity-100 flex flex-col pl-8 md:pl-12 lg:pl-16 space-y-2 mt-1">
+                                                            {effectiveSubLinks.map(sub => (
+                                                                <Link
+                                                                    key={sub.text + sub.href}
+                                                                    href={sub.href}
+                                                                    onClick={handleCloseDrawer}
+                                                                    className="text-lg md:text-xl text-gray-400 hover:text-white transition-colors flex items-center gap-2"
+                                                                >
+                                                                    <ArrowForwardIcon sx={{ fontSize: '1.2rem' }} />
+                                                                    {sub.text}
+                                                                </Link>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </motion.div>
                                         );
                                     })}

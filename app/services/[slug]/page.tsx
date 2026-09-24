@@ -1,14 +1,14 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useParams, notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, CheckCircle2, Zap, Target, Sparkles, Shield, Rocket } from "lucide-react";
+import { useParams } from "next/navigation";
+import { ArrowLeft, CheckCircle2, Zap, Target, Sparkles, Shield, Rocket } from "lucide-react";
 import { Spotlight } from "@/components/ui/spotlight";
 import { GlowingBorderCard } from "@/components/ui/glowing-border-card";
-import { DEFAULT_SERVICES_CONFIG } from "@/app/api/services-config/route";
+import ServicePageRenderer from "@/components/sections/ServicePageRenderer";
 
-const SERVICE_DETAILS: Record<
+const LEGACY_SERVICE_DETAILS: Record<
   string,
   {
     title: string;
@@ -100,145 +100,149 @@ const SERVICE_DETAILS: Record<
 
 export default function SubServiceDetailPage() {
   const params = useParams();
-  const slug = params?.slug as string;
+  const rawSlug = params?.slug as string;
+  const slug = rawSlug ? decodeURIComponent(rawSlug) : "";
 
-  const detail = SERVICE_DETAILS[slug];
+  const [hasDynamicService, setHasDynamicService] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!detail) {
+  useEffect(() => {
+    async function checkService() {
+      if (!slug) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/services?slug=${encodeURIComponent(slug)}`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.service) {
+            setHasDynamicService(true);
+            setLoading(false);
+            return;
+          }
+        }
+      } catch (err) {
+        // fallback
+      }
+
+      setHasDynamicService(false);
+      setLoading(false);
+    }
+
+    checkService();
+  }, [slug]);
+
+  if (loading) {
     return (
       <div className="min-h-screen bg-[#070d1d] text-white flex flex-col items-center justify-center p-6 text-center">
-        <h1 className="text-3xl font-bold mb-4">Service Not Found</h1>
-        <p className="text-gray-400 mb-6">
-          The requested service detail page could not be located.
-        </p>
-        <Link
-          href="/services"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-blue-600 text-white font-medium hover:bg-blue-700"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back to All Services</span>
-        </Link>
+        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-gray-400 text-sm">Loading Service Information...</p>
       </div>
     );
   }
 
-  return (
-    <div className="relative min-h-screen bg-[#070d1d] text-white selection:bg-blue-600 selection:text-white pt-28 pb-20 overflow-hidden">
-      {/* Background accents */}
-      <Spotlight
-        className="-top-40 left-0 md:left-60 md:-top-20"
-        fill="rgba(59, 130, 246, 0.35)"
-      />
+  // If found in dynamic CMS database, render the Full Service Page!
+  if (hasDynamicService) {
+    return <ServicePageRenderer slug={slug} />;
+  }
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Back Link */}
-        <div className="mb-8">
-          <Link
-            href="/services"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-gray-400 hover:text-blue-400 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back to Services</span>
-          </Link>
-        </div>
+  // Check legacy fallback
+  const legacyDetail = LEGACY_SERVICE_DETAILS[slug];
+  if (legacyDetail) {
+    return (
+      <div className="relative min-h-screen bg-[#070d1d] text-white selection:bg-blue-600 selection:text-white pt-28 pb-20 overflow-hidden">
+        <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="rgba(59, 130, 246, 0.35)" />
 
-        {/* Hero Header */}
-        <div className="mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-4">
-            <span className="text-base">{detail.icon}</span>
-            <span>CAPABILITY DEEP DIVE</span>
-          </div>
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
-            {detail.title}
-          </h1>
-          <p className="text-lg sm:text-xl text-blue-300 font-medium mb-6">
-            {detail.subtitle}
-          </p>
-          <p className="text-base sm:text-lg text-gray-300 leading-relaxed max-w-3xl">
-            {detail.heroDesc}
-          </p>
-        </div>
-
-        {/* Deliverables & Outcomes Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-14">
-          {/* Deliverables */}
-          <GlowingBorderCard
-            glowColor="rgba(59, 130, 246, 0.15)"
-            borderGlowColor="rgba(59, 130, 246, 0.6)"
-            className="h-full"
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-400">
-                <Target className="w-5 h-5" />
-              </div>
-              <h2 className="text-xl font-bold text-white">What You Receive</h2>
-            </div>
-            <ul className="space-y-4">
-              {detail.deliverables.map((item, idx) => (
-                <li key={idx} className="flex items-start gap-3 text-sm text-gray-300">
-                  <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </GlowingBorderCard>
-
-          {/* Business Outcomes */}
-          <GlowingBorderCard
-            glowColor="rgba(59, 130, 246, 0.15)"
-            borderGlowColor="rgba(59, 130, 246, 0.6)"
-            className="h-full"
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400">
-                <Rocket className="w-5 h-5" />
-              </div>
-              <h2 className="text-xl font-bold text-white">Expected Outcomes</h2>
-            </div>
-            <ul className="space-y-4">
-              {detail.outcomes.map((item, idx) => (
-                <li key={idx} className="flex items-start gap-3 text-sm text-gray-300">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-8 pt-6 border-t border-white/[0.08] flex items-center justify-between text-xs text-gray-400">
-              <span className="uppercase font-semibold tracking-wider text-blue-400">
-                Typical Delivery Window:
-              </span>
-              <span className="font-bold text-white">{detail.timeline}</span>
-            </div>
-          </GlowingBorderCard>
-        </div>
-
-        {/* CTA Card */}
-        <div className="rounded-3xl bg-gradient-to-r from-blue-900/40 via-indigo-900/30 to-blue-950/50 border border-blue-500/30 p-8 sm:p-10 text-center">
-          <h3 className="text-2xl font-bold text-white mb-3">
-            Ready to execute {detail.title}?
-          </h3>
-          <p className="text-gray-300 text-sm sm:text-base max-w-xl mx-auto mb-6">
-            Partner with Digital Spyke to build an authoritative presence and
-            scale your inbound revenue.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-8">
             <Link
-              href="/services#contact"
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-bold text-sm text-white bg-[#1D4ED8] hover:bg-[#1e40af] shadow-[0_0_20px_rgba(29,78,216,0.6)] transition-all"
+              href="/services"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-gray-400 hover:text-blue-400 transition-colors"
             >
-              <span>Get Started with Us</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Services</span>
             </Link>
+          </div>
+
+          <div className="mb-14">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-4">
+              <span className="text-base">{legacyDetail.icon}</span>
+              <span>CAPABILITY DEEP DIVE</span>
+            </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-4">
+              {legacyDetail.title}
+            </h1>
+            <p className="text-xl text-blue-300 font-medium mb-6">{legacyDetail.subtitle}</p>
+            <p className="text-gray-300 text-lg leading-relaxed max-w-3xl">{legacyDetail.heroDesc}</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+            <GlowingBorderCard className="p-8">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+                  <Target className="w-5 h-5" />
+                </div>
+                <h3 className="text-xl font-bold text-white">Tangible Deliverables</h3>
+              </div>
+              <ul className="space-y-4">
+                {legacyDetail.deliverables.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-3 text-sm text-gray-300">
+                    <CheckCircle2 className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </GlowingBorderCard>
+
+            <GlowingBorderCard className="p-8">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+                  <Rocket className="w-5 h-5" />
+                </div>
+                <h3 className="text-xl font-bold text-white">Measurable Outcomes</h3>
+              </div>
+              <ul className="space-y-4">
+                {legacyDetail.outcomes.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-3 text-sm text-gray-300">
+                    <Zap className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </GlowingBorderCard>
+          </div>
+
+          <div className="p-8 rounded-2xl border border-white/10 bg-gradient-to-r from-blue-900/30 via-indigo-900/20 to-black/40 text-center">
+            <h3 className="text-2xl font-bold text-white mb-2">Ready to Deploy This Capability?</h3>
+            <p className="text-gray-400 mb-6 max-w-xl mx-auto text-sm">
+              Schedule a technical consultation to map your requirements and timeline.
+            </p>
             <Link
               href="/book-meeting"
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-medium text-sm text-gray-300 hover:text-white bg-white/[0.06] hover:bg-white/[0.1] border border-white/20 transition-all"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition-all shadow-[0_0_25px_rgba(37,99,235,0.4)]"
             >
-              <span>Book a Strategy Call</span>
+              <span>Schedule Architecture Consultation</span>
             </Link>
           </div>
         </div>
       </div>
+    );
+  }
+
+  // Not found fallback
+  return (
+    <div className="min-h-screen bg-[#070d1d] text-white flex flex-col items-center justify-center p-6 text-center">
+      <h1 className="text-3xl font-bold mb-4">Service Not Found</h1>
+      <p className="text-gray-400 mb-6">The requested service detail page could not be located.</p>
+      <Link
+        href="/services"
+        className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-blue-600 text-white font-medium hover:bg-blue-700"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        <span>Back to All Services</span>
+      </Link>
     </div>
   );
 }

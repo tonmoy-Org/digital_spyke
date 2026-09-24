@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function FAQPage() {
   return (
-    <main className="min-h-screen bg-[#030712] text-white pt-24 pb-16">
+    <main className="min-h-screen  text-white pt-24 pb-16">
       {/* Top Page Header Banner */}
       <section className="relative px-4 sm:px-6 lg:px-8 pt-8 pb-4 text-center max-w-4xl mx-auto">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 mb-4">

@@ -37,7 +37,7 @@ export const GlowingBorderCard: React.FC<GlowingBorderCardProps> = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={cn(
-        "relative rounded-2xl p-[1px] overflow-hidden transition-all duration-300 group",
+        "relative rounded-2xl p-[1px] overflow-hidden transition-all duration-300 group hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl hover:z-20",
         className
       )}
       {...props}

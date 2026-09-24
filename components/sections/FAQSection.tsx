@@ -61,12 +61,34 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Code2,
 };
 
-export default function FAQSection() {
+export interface FAQOverrideData {
+  enabled?: boolean;
+  tag?: string;
+  tagFontSize?: string;
+  headline?: string;
+  headlineHtml?: string;
+  headlineFontSize?: string;
+  description?: string;
+  inheritGlobalFaqs?: boolean;
+  faqs?: Array<{
+    id: string;
+    question: string;
+    answer: string;
+    category?: string;
+    order?: number;
+  }>;
+}
+
+interface FAQSectionProps {
+  overrideData?: FAQOverrideData;
+}
+
+export default function FAQSection({ overrideData }: FAQSectionProps = {}) {
   const [data, setData] = useState<FAQSectionData>(DEFAULT_FAQ_DATA);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("All");
 
-  // Fetch live FAQ data from API
+  // Fetch live FAQ data from API if not overriding completely
   useEffect(() => {
     let isMounted = true;
     async function fetchFAQData() {
@@ -88,18 +110,45 @@ export default function FAQSection() {
     };
   }, []);
 
+  if (overrideData?.enabled === false) {
+    return null;
+  }
+
+  // Merge overrideData if passed
+  const effectiveData: FAQSectionData = {
+    ...data,
+    ...(overrideData?.tag ? { showBadge: true, badgeText: overrideData.tag, badgeFontSize: overrideData.tagFontSize } : {}),
+    ...(overrideData?.headlineHtml ? { headingHtml: overrideData.headlineHtml, headingFontSize: overrideData.headlineFontSize } : {}),
+    ...(overrideData?.headline && !overrideData.headlineHtml
+      ? { headingPrefix: overrideData.headline, headingHighlight: "", headingSuffix: "", headingFontSize: overrideData.headlineFontSize }
+      : {}),
+    ...(overrideData?.description ? { description: overrideData.description } : {}),
+    ...(overrideData?.faqs && overrideData.faqs.length > 0 && !overrideData?.inheritGlobalFaqs
+      ? {
+          faqs: overrideData.faqs.map((f, idx) => ({
+            id: f.id || `faq-${idx}`,
+            question: f.question,
+            answer: f.answer,
+            category: f.category || "General",
+            isActive: true,
+            order: f.order ?? idx,
+          })),
+        }
+      : {}),
+  };
+
   const toggleFaq = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
   // Filter active FAQs and sort by order
-  const activeFaqs = (data.faqs || [])
+  const activeFaqs = (effectiveData.faqs || [])
     .filter((f) => f.isActive !== false)
     .sort((a, b) => (a.order || 0) - (b.order || 0));
 
   // Filter by category if user clicks a tab
   const displayedFaqs = activeFaqs.filter((faq) => {
-    if (!data.showCategoryFilter || activeCategory === "All") return true;
+    if (!effectiveData.showCategoryFilter || activeCategory === "All") return true;
     return faq.category === activeCategory;
   });
 
@@ -111,14 +160,14 @@ export default function FAQSection() {
         activeFaqs
           .map((f) => f.category)
           .filter((c): c is string => Boolean(c && c !== "All"))
-      )
+      ) 
     ),
   ];
 
-  const iconColor = data.iconColor || "#22d3ee";
+  const iconColor = effectiveData.iconColor || "#22d3ee";
 
   return (
-    <section className="relative w-full pt-16 sm:pt-24 pb-24 sm:pb-36 px-4 sm:px-6 lg:px-8 overflow-hidden bg-[#030712]">
+    <section className="relative w-full pt-16 sm:pt-24 pb-24 sm:pb-36 px-4 sm:px-6 lg:px-8 overflow-hidden ">
       {/* Background Subtle Ambient Glows */}
       <div className="absolute top-1/2 left-0 -translate-y-1/2 w-96 h-96 bg-cyan-500/10 blur-[130px] rounded-full pointer-events-none -z-10" />
       <div className="absolute top-1/3 right-0 w-96 h-96 bg-purple-600/10 blur-[140px] rounded-full pointer-events-none -z-10" />
@@ -134,60 +183,60 @@ export default function FAQSection() {
             className="lg:col-span-5 lg:sticky lg:top-32"
           >
             {/* Optional Badge */}
-            {data.showBadge && data.badgeText && (
+            {effectiveData.showBadge && effectiveData.badgeText && (
               <div
                 className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-bold uppercase tracking-wider mb-4 border border-white/10"
                 style={{
-                  fontSize: data.badgeFontSize || "0.75rem",
-                  color: data.badgeColor || "#00FFAB",
-                  backgroundColor: data.badgeBgColor || "rgba(0, 255, 171, 0.1)",
+                  fontSize: effectiveData.badgeFontSize || "0.75rem",
+                  color: effectiveData.badgeColor || "#00FFAB",
+                  backgroundColor: effectiveData.badgeBgColor || "rgba(0, 255, 171, 0.1)",
                 }}
               >
                 <Sparkles className="w-3 h-3" />
-                <span>{data.badgeText}</span>
+                <span>{effectiveData.badgeText}</span>
               </div>
             )}
 
             {/* Main Heading */}
-            {data.headingHtml ? (
+            {effectiveData.headingHtml ? (
               <div
                 className="font-extrabold text-white tracking-tight leading-[1.1] text-4xl sm:text-5xl lg:text-6xl [&_span]:inline-block"
-                style={{ fontSize: data.headingFontSize || undefined }}
-                dangerouslySetInnerHTML={{ __html: data.headingHtml }}
+                style={{ fontSize: effectiveData.headingFontSize || undefined }}
+                dangerouslySetInnerHTML={{ __html: effectiveData.headingHtml }}
               />
             ) : (
               <h2
                 className="font-extrabold text-white tracking-tight leading-[1.1] text-4xl sm:text-5xl lg:text-6xl"
-                style={{ fontSize: data.headingFontSize || undefined }}
+                style={{ fontSize: effectiveData.headingFontSize || undefined }}
               >
-                <span className="block text-white">{data.headingPrefix || "Frequently asked"}</span>
+                <span className="block text-white">{effectiveData.headingPrefix || "Frequently asked"}</span>
                 <span className="bg-gradient-to-r from-[#00FFAB] via-[#22d3ee] to-[#6B46FF] bg-clip-text text-transparent inline-block">
-                  {data.headingHighlight || "questions"}
+                  {effectiveData.headingHighlight || "questions"}
                 </span>
-                {data.headingSuffix ? (
-                  <span className="text-white"> {data.headingSuffix}</span>
+                {effectiveData.headingSuffix ? (
+                  <span className="text-white"> {effectiveData.headingSuffix}</span>
                 ) : null}
               </h2>
             )}
 
             {/* Description */}
-            {data.descriptionHtml ? (
+            {effectiveData.descriptionHtml ? (
               <div
                 className="mt-5 text-gray-400 leading-relaxed max-w-md text-sm sm:text-base [&_p]:leading-relaxed"
-                style={{ fontSize: data.descriptionFontSize || undefined }}
-                dangerouslySetInnerHTML={{ __html: data.descriptionHtml }}
+                style={{ fontSize: effectiveData.descriptionFontSize || undefined }}
+                dangerouslySetInnerHTML={{ __html: effectiveData.descriptionHtml }}
               />
             ) : (
               <p
                 className="mt-5 text-gray-400 leading-relaxed max-w-md text-sm sm:text-base"
-                style={{ fontSize: data.descriptionFontSize || undefined }}
+                style={{ fontSize: effectiveData.descriptionFontSize || undefined }}
               >
-                {data.description}
+                {effectiveData.description}
               </p>
             )}
 
             {/* Optional Side Image / Graphic */}
-            {data.showSideImage && data.sideImageUrl && (
+            {effectiveData.showSideImage && effectiveData.sideImageUrl && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -197,8 +246,8 @@ export default function FAQSection() {
               >
                 <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 p-2 backdrop-blur-sm max-w-sm group hover:border-cyan-500/30 transition-all">
                   <img
-                    src={data.sideImageUrl}
-                    alt={data.sideImageAlt || "FAQ Illustration"}
+                    src={effectiveData.sideImageUrl}
+                    alt={effectiveData.sideImageAlt || "FAQ Illustration"}
                     className="w-full h-auto object-contain rounded-xl transition-transform duration-300 group-hover:scale-[1.02]"
                   />
                 </div>
@@ -215,7 +264,7 @@ export default function FAQSection() {
             className="lg:col-span-7"
           >
             {/* Optional Category Filter Pills */}
-            {data.showCategoryFilter && availableCategories.length > 2 && (
+            {effectiveData.showCategoryFilter && availableCategories.length > 2 && (
               <div className="flex flex-wrap items-center gap-2 mb-6">
                 {availableCategories.map((category) => (
                   <button
